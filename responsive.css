@@ -1,0 +1,681 @@
+/* ============================================= */
+/* ==   RESPONSIVENESS FOR ALL DESKTOP SIZES  == */
+/* ============================================= */
+/* Filename: responsive.css                      */
+/* Purpose: Ensures the site looks great on very */
+/* large monitors down to small laptops.         */
+/* ============================================= */
+
+/* --- Key Breakpoints Used --- */
+/* 1. Very Large Desktops (> 1600px) */
+/* 2. Standard Laptops      (< 1440px) */
+/* 3. Small Laptops         (< 1200px) */
+/* 4. Very Small Laptops    (< 1024px) */
+/* 5. Image 1 Specific      (< 850px) - New for the requested layout */
+
+
+/* ============================================= */
+/* ==   1. VERY LARGE DESKTOPS (1600px+)      == */
+/* ============================================= */
+@media (min-width: 1600px) {
+    /* Increase base font size slightly for better readability on huge screens */
+    html {
+        font-size: 17px;
+    }
+
+    /* Give the main containers a bit more breathing room */
+    .container, .about-container, .help-content-wrapper {
+        max-width: 1360px;
+    }
+
+    /* Slightly increase header padding */
+    header {
+        padding: 1rem 4rem;
+    }
+}
+
+
+/* ============================================= */
+/* ==   2. STANDARD LAPTOPS (max 1440px)      == */
+/* ============================================= */
+@media (max-width: 1440px) {
+    html {
+        font-size: 15.5px;
+    }
+
+    /* Reduce header search bar width */
+    .option-item.search {
+        width: 280px;
+    }
+
+    /* Make hero section text slightly smaller */
+    .hero-text-content h1 {
+        font-size: 4rem;
+    }
+
+    .general-service-card {
+        height: 480px; /* Slightly shorter cards */
+    }
+
+    /* Adjust the three-column booking modal */
+    .modal-content-wrapper {
+        width: 1080px; /* Slightly narrower */
+    }
+
+    #services-sidebar {
+        width: 260px;
+    }
+
+    /* Adjust checkout pane widths */
+    #checkout-summary-pane {
+        width: 38%;
+    }
+    .modal.modal-shifted .modal-content-wrapper{
+    border-radius: 0px;
+}
+.modal.modal-shifted .recommendation-card img{
+   height:280px;
+}
+}
+
+
+/* ============================================= */
+/* ==   3. SMALL LAPTOPS (max 1200px)         == */
+/* ============================================= */
+@media (max-width: 1200px) {
+    html {
+        font-size: 15px;
+    }
+
+    /* Adjust header padding and search bar */
+    header, .about-us-header {
+        padding: 1rem 1.5rem;
+    }
+    .site-header.scrolled, header.scrolled {
+        padding: 0.75rem 1.5rem;
+    }
+    .option-item.search {
+        width: 240px;
+    }
+
+    /* Adjust hero section for smaller screens */
+    .hero-container {
+        gap: 2rem;
+        padding: 1.5rem;
+    }
+    .hero-text-content h1 {
+        font-size: 3.5rem;
+    }
+    .hero-text-content p {
+        font-size: 1.05rem;
+    }
+
+    /* Reduce horizontal scroll card widths */
+    #services .services-container > .general-service-card,
+    .slider-track .service-card {
+        flex-shrink: 0;
+        width: 300px;
+    }
+    .electrician-theme .slider-wrapper {
+        width: 100%;
+        left: 0;
+    }
+
+    /* --- CRITICAL: Adjust multi-column modals --- */
+
+    /* Booking/Details Modal */
+    .modal-content-wrapper {
+        width: 95vw; /* Switch to viewport width */
+        max-width: 960px;
+    }
+    #services-sidebar {
+        width: 200px; /* Slimmer sidebar */
+    }
+    #booking-details-content-area {
+        padding: 15px; /* Reduce padding */
+    }
+  /* ---- NEW, CORRECTED CODE FOR responsive.css ---- */
+
+.your-booking-card {
+    flex-direction: column; /* This was already correct */
+}
+
+.booking-card-image {
+    width: 100%; /* Image container takes full width when stacked */
+    height: 500px; /* Allow height to be determined by aspect ratio */
+    aspect-ratio: 16 / 9; /* A common and pleasant aspect ratio */
+    margin-top: -10px; /* Add some space above the image when stacked */
+    order: -1; /* This moves the image above the text on smaller screens */
+    max-width: 647px;
+}
+ 
+    
+    /* Cart Sidebar */
+    .cart-sidebar {
+        width: 320px;
+    }
+    .cart-sidebar.active {
+        right: 0;
+    }
+
+    /* Shifted view for Deep Details popup */
+    #service-deep-details-modal.shifted-view {
+        padding-right: 350px;
+    }
+    #service-deep-details-modal.shifted-view .deep-details-dialog {
+       width: calc(153% - 350px);
+    }
+
+    /* Checkout Page */
+    #checkout-summary-pane {
+        width: 45%; /* Summary pane takes more space */
+    }
+    /* When summary pane is centered (step 1) */
+ 
+    /* Add these rules inside the @media (max-width: 1200px) block */
+
+/* Fix 1: Corrects the padding to match the new 350px cart width */
+.modal.modal-shifted {
+    padding-right: 350px;
+}
+
+/* Fix 2: Switches recommendations to a single column ONLY when the cart is open */
+.modal.modal-shifted .recommendations-wrapper {
+    grid-template-columns: 1fr;
+}
+.recommendation-card img{
+    height:282px;
+}
+
+.modal.modal-shifted {
+    width: 65%;
+    padding-right: 0px; /* This correctly removes any extra space */
+}
+
+  
+
+/* This rule targets the cart sidebar ONLY when it is active */
+.cart-sidebar.active {
+    width: 35%;
+}
+.modal.modal-shifted .booking-card-image {
+    height: 400px;
+}
+#service-deep-details-modal.shifted-view {
+        left: 0px;
+        padding-right: 0;
+    }
+     #service-deep-details-modal.shifted-view .deep-details-dialog {
+        left: 0px;
+        width: 65%;
+    }
+    #service-deep-details-modal.shifted-view {
+    justify-content: flex-start;
+    }
+
+    .modal.modal-shifted .modal-content-wrapper{
+    border-radius: 0px;
+}
+
+    #checkout-summary-pane {
+        width: 38%;
+    }
+
+}
+
+
+/* ============================================= */
+/* == 4. VERY SMALL LAPTOPS (max 1024px)      == */
+/* ============================================= */
+@media (max-width: 1024px) {
+    /* This breakpoint handles the transition before the main 992px media query kicks in */
+
+    /* Hide some header options to prevent crowding */
+    .main-nav {
+        display: none;
+    }
+    .option-item.search {
+        width: 200px;
+    }
+     .header-options {
+        gap: 8px;
+    }
+
+    /* Further reduce hero text size */
+    .hero-text-content h1 {
+        font-size: 3rem;
+    }
+
+    /* Make modals take up more screen width */
+    .modal-content-wrapper {
+        width: 98vw;
+    }
+    .deep-details-dialog, .cart-modal-content1, .slot-modal-content, .location-modal-dialog {
+        width: 95%;
+        max-width: 680px;
+    }
+
+    /* Adjust multi-column modal for smaller screens */
+    #services-sidebar {
+        width: 200px;
+    }
+    #booking-details-content-area {
+        padding: 10px;
+    }
+
+/* Cart Sidebar */
+    .cart-sidebar {
+        width: 280px;
+    }
+    .cart-sidebar.active {
+        right: 0;
+    }
+
+
+    
+    /* Adjust Checkout Layout */
+    .checkout-container {
+        grid-template-columns: 1.5fr 1fr; /* Give summary more space */
+        gap: 20px;
+    }
+    #checkout-summary-pane {
+        width: 38%;
+    }
+    
+
+    /* Stack electrician theme content */
+    .electrician-layout-container {
+        grid-template-columns: 1fr;
+        text-align: center;
+    }
+    .electrician-info-box h2, .electrician-info-box .section-subtitle, .electrician-info-box ul {
+        text-align: center;
+    }
+     .electrician-info-box ul {
+        display: inline-block;
+    }
+    .recommendation-card img {
+        height:275px;
+    }
+    .booking-card-image {
+    width: 100%; /* Image container takes full width when stacked */
+    height: 500px; /* Allow height to be determined by aspect ratio */
+    aspect-ratio: 16 / 9; /* A common and pleasant aspect ratio */
+    margin-top: -10px; /* Add some space above the image when stacked */
+    order: -1; /* This moves the image above the text on smaller screens */
+    max-width: 647px;
+}
+
+body.cart-open #main-app-container {
+    padding-right: 320px; /* Pushes the main content left by the width of the cart */
+    transition: padding-right 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+}
+   /* responsive.css (inside @media (max-width: 1024px)) */
+
+/* This rule now targets the modal ONLY when it's shifted (i.e., cart is open) */
+.modal.modal-shifted {
+    width: 72%;
+    padding-right: 0px; /* This correctly removes any extra space */
+}
+
+  
+
+/* This rule targets the cart sidebar ONLY when it is active */
+.cart-sidebar.active {
+    width: 28%;
+}
+.modal.modal-shifted .booking-card-image {
+    height: 350px;
+}
+.modal.modal-shifted .modal-content-wrapper{
+    border-radius: 0px;
+}
+#service-deep-details-modal.shifted-view {
+        left: 0px;
+        padding-right: 0;
+    }
+     #service-deep-details-modal.shifted-view .deep-details-dialog {
+        left: 0px;
+        width: 72%;
+    }
+    #service-deep-details-modal.shifted-view {
+    justify-content: flex-start;
+    }
+}
+
+
+
+   @media (max-width: 1024px) {
+     .checkout-container {
+        grid-template-columns: 1.5fr 1fr; /* Give summary more space */
+        gap: 20px;
+    }
+    #checkout-summary-pane {
+        width: 38%;
+    }
+   }
+   @media (max-width: 900px) {
+    #checkout-summary-pane {
+        width: 38%;
+    }
+      .pane-scroll-content1 {
+    overflow-y: auto;
+    flex-grow: 1;
+    padding: 20px;
+    width:59%;
+}
+
+
+   }
+    @media (max-width: 882px) {
+    #checkout-summary-pane {
+        width: 40%;
+    }
+      .pane-scroll-content1 {
+    overflow-y: auto;
+    flex-grow: 1;
+    padding: 20px;
+    width:58%;
+}
+
+
+   }
+   @media (max-width: 866px) {
+    #checkout-summary-pane {
+        width: 40%;
+    }
+      .pane-scroll-content1 {
+    overflow-y: auto;
+    flex-grow: 1;
+    padding: 20px;
+    width:56%;
+}
+
+
+   }
+/* ======================================================= */
+/* ==   5. IMAGE 1 SPECIFIC LAYOUT (max 850px)          == */
+/* ==   Reverts Hero Layout to Horizontal for this size == */
+/* ======================================================= */
+@media (max-width: 850px) {
+    /* Adjust header for very small screens to fit content */
+    header {
+        padding: 0.75rem 1rem;
+    }
+    .option-item.search {
+        width: 180px; /* Even smaller search bar */
+    }
+    .header-options .icon-button {
+        padding: 8px; /* Smaller icon buttons */
+    }
+
+    /* --- CRITICAL: HERO SECTION LAYOUT ADJUSTMENT --- */
+    .hero-section {
+        flex-direction: row; /* Make hero content horizontal again */
+        padding: 15px; /* Reduce padding */
+        min-height: auto; /* Remove minimum height to prevent excessive spacing */
+        align-items: center; /* Vertically align items */
+        justify-content: center;
+        flex-wrap: wrap; /* Allow wrapping if content is too wide */
+    }
+
+    .hero-container {
+        flex-direction: row; /* Ensure inner container is also horizontal */
+        justify-content: space-between; /* Space out text and image */
+        align-items: center; /* Vertically align items */
+        width: 100%; /* Take full width */
+        gap: 1.5rem; /* Reduce gap */
+    }
+
+    .hero-text-content {
+        flex: 1; /* Allow text content to take available space */
+        min-width: 300px; /* Ensure text content has a minimum width */
+        text-align: left; /* Align text to the left */
+        padding: 10px; /* Add some padding around text */
+    }
+
+    .hero-text-content h1 {
+        font-size: 2.5rem; /* Further reduce heading size */
+        margin-bottom: 0.5rem; /* Reduce margin */
+    }
+
+    .hero-text-content p {
+        font-size: 0.95rem; /* Further reduce paragraph size */
+        margin-bottom: 1rem; /* Reduce margin */
+    }
+
+    .hero-image-container {
+        flex: 1; /* Allow image to take available space */
+        max-width: 400px; /* Limit image width to prevent it from being too large */
+        min-width: 250px; /* Ensure image has a minimum width */
+        height: auto; /* Allow height to adjust naturally */
+        aspect-ratio: 16/9; /* Maintain a 16:9 aspect ratio for the image */
+        order: 1; /* Keep the image on the right */
+    }
+
+    .hero-image-container img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover; /* Ensure image covers the container */
+        border-radius: 12px; /* Maintain border radius */
+    }
+
+    .explore-button {
+        font-size: 0.9rem; /* Smaller button text */
+        padding: 0.8rem 1.5rem; /* Smaller button padding */
+    }
+
+
+  .modal-content-wrapper {
+    
+    width: 95vw;
+    max-width: 700px;
+    overflow-y: auto; /* <-- ADD THIS LINE */
+}
+/* In responsive.css, inside @media (max-width: 850px) */
+
+/* 1. Make the sidebar much slimmer */
+#services-sidebar {
+    width: 220px; /* REDUCED from its larger size */
+    flex-shrink: 0; /* Prevents it from shrinking further */
+    padding: 15px;
+    overflow-y: auto; /* Ensure sidebar itself can scroll if needed */
+}
+
+/* 2. Adjust the main content area */
+#booking-details-content-area {
+    width: 100%; /* This will fill the remaining space */
+    padding: 10px; /* Slightly reduced padding */
+    overflow-y: auto;
+}
+
+/* 3. Make the "Your Booking" card more compact */
+.your-booking-card {
+    padding: 20px; /* Reduced padding */
+    gap: 15px;
+}
+
+.booking-card-details .service-title {
+    font-size: 1.5rem; /* Smaller title font */
+}
+
+.booking-card-image {
+    width: 120px; /* Smaller image width */
+}
+
+
+
+/* 4. Make the recommendation card titles smaller */
+.recommendation-card h4 {
+    font-size: 0.9rem;
+}
+    .booking-summary-card {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+    .booking-summary-card img {
+        margin-bottom: 10px;
+    }
+
+    /* Checkout Layout for very small screens */
+    .checkout-container {
+        grid-template-columns: 1fr; /* Stack checkout panes */
+        gap: 15px;
+        padding: 15px;
+    }
+   
+    #checkout-details-pane {
+        order: 2; /* Details pane below */
+    }
+/* Cart Sidebar */
+    .cart-sidebar {
+        width: 350px;
+    }
+    .cart-sidebar.active {
+        right: 0;
+    }
+
+  /* Shifted view for Deep Details popup */
+    #service-deep-details-modal.shifted-view {
+        left:0px;
+        padding-right: 350px;
+    }
+    #service-deep-details-modal.shifted-view .deep-details-dialog {
+        left:0px;
+       width: calc(200% - 300px);
+    }
+ .recommendations-wrapper {
+        display: grid !important; /* This forces the grid layout */
+        grid-template-columns: 1fr;
+        gap: 20px;
+    }
+
+    .booking-card-image {
+    width: 100%; /* Image container takes full width when stacked */
+    height: 400px; /* Allow height to be determined by aspect ratio */
+    aspect-ratio: 16 / 9; /* A common and pleasant aspect ratio */
+    margin-top: -10px; /* Add some space above the image when stacked */
+    order: -1; /* This moves the image above the text on smaller screens */
+    max-width: 647px;
+}
+
+.modal.modal-shifted {
+    width: 70%;
+    padding-right: 0px; /* This correctly removes any extra space */
+}
+
+  
+
+/* This rule targets the cart sidebar ONLY when it is active */
+.cart-sidebar.active {
+    width: 30%;
+}
+
+#service-deep-details-modal.shifted-view {
+        left: 0px;
+        padding-right: 0;
+    }
+     #service-deep-details-modal.shifted-view .deep-details-dialog {
+        left: 0px;
+        width: 70%;
+    }
+    #service-deep-details-modal.shifted-view {
+    justify-content: flex-start;
+    }
+
+    .checkout-container {
+        grid-template-columns: 1.5fr 1fr; /* Give summary more space */
+        gap: 20px;
+    }
+    #checkout-summary-pane {
+        width: 45%;
+    }
+    .pane-scroll-content1 {
+    overflow-y: auto;
+    flex-grow: 1;
+    padding: 20px;
+    width:50%;
+}
+    
+}
+
+ @media (max-width: 826px) {
+    #checkout-summary-pane {
+        width: 41%;
+    }
+      .pane-scroll-content1 {
+    overflow-y: auto;
+    flex-grow: 1;
+    padding: 20px;
+    width:52%;
+}
+
+
+   }
+
+    @media (max-width: 800px) {
+    #checkout-summary-pane {
+        width: 42%;
+    }
+      .pane-scroll-content1 {
+    overflow-y: auto;
+    flex-grow: 1;
+    padding: 20px;
+    width:50%;
+}
+   }
+
+      @media (max-width: 775px) {
+    #checkout-summary-pane {
+        width: 42%;
+    }
+      .pane-scroll-content1 {
+    overflow-y: auto;
+    flex-grow: 1;
+    padding: 20px;
+    width:48%;
+}
+   }
+
+/* ======================================================= */
+/* ==   VERTICAL RESPONSIVENESS (for short screens)     == */
+/* ======================================================= */
+@media (max-height: 750px) {
+    /* For shorter, wider laptop screens */
+
+    /* Reduce vertical padding on popups */
+    .deep-details-content, .slot-modal-body, .payment-modal-body, .addon-modal-body {
+        padding-top: 15px;
+        padding-bottom: 15px;
+    }
+    
+    .deep-details-dialog, .cart-modal-content1, .slot-modal-content {
+        max-height: 88vh; /* Allow modals to use more vertical space */
+    }
+    
+    /* Make deep details image shorter */
+    #deep-details-image-container {
+        height: 700px;
+    }
+
+    /* Reduce hero section padding */
+    .hero-section {
+        min-height: calc(100vh - 77px);
+        padding: 20px;
+    }
+   
+
+    .confirmation-modal-content {
+        padding: 15px;
+    }
+        #service-deep-details-modal.shifted-view .deep-details-dialog{
+            max-height:104%;
+        }
+
+            .modal-content-wrapper{
+                height:105%;
+                max-height: 105%;
+            }
+        
+}
+

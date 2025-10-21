@@ -1,0 +1,2127 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>OnClickSeva - Your Services at a Click</title>
+    <script src="https://cdn.socket.io/4.7.5/socket.io.min.js"></script>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="footer.css">
+    <link rel="stylesheet" href="responsive.css">
+    <link rel="stylesheet" href="mobile-nav.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<div id="loading-spinner" class="modal hidden" style="justify-content: center; align-items: center; background-color: rgba(0,0,0,0.3); z-index: 9999;">
+    <div class="fa-3x">
+        <i class="fas fa-spinner fa-spin" style="color: white;"></i>
+    </div>
+</div>
+<body>
+    <div id="login-page-container">
+     <header class="site-header">
+      <div class="container">
+        <a href="#" class="logo">
+          <img
+            src="https://raw.githubusercontent.com/sankumardeep/pesonal-pic/main/onclick%20logo.jpg"
+            alt="OnClickSeva Logo"
+          />
+          <span>OnClickSeva</span>
+        </a>
+        <div class="header-right">
+          <nav class="main-nav">
+            <ul>
+              <li><a href="#" class="nav-link">Book a service</a></li>
+              <li><a href="#" class="nav-link" data-action="open-about-us">About us</a></li>
+            </ul>
+          </nav>
+          <div class="location-selector">
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              width="20"
+              height="20"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+            >
+              <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path>
+              <circle cx="12" cy="10" r="3"></circle>
+            </svg>
+            <span>Patna</span>
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              width="16"
+              height="16"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+            >
+              <polyline points="6 9 12 15 18 9"></polyline>
+            </svg>
+          </div>
+        </div>
+      </div>
+    </header>
+
+    <main class="main-content">
+      <section class="login-hero-section">
+        <div class="container login-hero-container">
+          <div class="login-hero-text">
+            <h1>Your Home, Our Priority.</h1>
+            <p>
+              The best professionals for all your home needs are just a click
+              away. Reliable, fast, and secure.
+            </p>
+
+            <div class="login-card">
+              <div class="tabs">
+                <button id="login-tab" class="tab-btn active">Login</button>
+                <button id="signup-tab" class="tab-btn">Sign Up</button>
+              </div>
+
+              <div id="form-message" class="form-message"></div>
+
+              <div id="login-panel" class="form-panel active">
+                <form id="login-form">
+                  <label for="phone-number" class="sr-only">Phone Number</label>
+                  <div class="input-group">
+                    <span class="input-prefix">+91</span>
+                    <input
+                      id="phone-number"
+                      type="tel"
+                      placeholder="Enter phone number"
+                      required
+                    />
+                  </div>
+                  <small class="error-text" id="phone-error"></small>
+
+                  <div id="otp-group" hidden>
+                    <label for="otp-code" class="sr-only">OTP Code</label>
+                    <div class="input-group">
+                      <input
+                        id="otp-code"
+                        type="text"
+                        placeholder="Enter 6-digit OTP"
+                        required
+                      />
+                    </div>
+                    <p class="resend-otp-text">
+                      Didn't receive code?
+                      <a href="#" id="resend-link">Resend OTP</a>
+                      <span id="countdown-timer"></span>
+                    </p>
+                  </div>
+
+                  <button type="button" id="send-otp-button" class="btn-submit">
+                    Send OTP
+                  </button>
+                  <button
+                    type="submit"
+                    id="verify-otp-button"
+                    class="btn-submit"
+                    hidden
+                  >
+                    Verify OTP
+                  </button>
+                </form>
+              </div>
+
+          <div id="signup-panel" class="form-panel">
+                <form id="signup-form">
+                  <label for="signup-name" class="sr-only">Full Name</label>
+                  <div class="input-group">
+                    <input
+                      id="signup-name"
+                      type="text"
+                      placeholder="Enter your full name"
+                      required
+                    />
+                  </div>
+                  <small class="error-text" id="signup-name-error"></small>
+
+                  <label for="signup-email" class="sr-only"
+                    >Email Address</label
+                  >
+                  <div class="input-group">
+                    <input
+                      id="signup-email"
+                      type="email"
+                      placeholder="Enter your email address"
+                      required
+                    />
+                  </div>
+                  <small class="error-text" id="signup-email-error"></small>
+
+                  <label for="signup-phone" class="sr-only">Phone Number</label>
+                  <div class="input-group">
+                    <span class="input-prefix">+91</span>
+                    <input
+                      id="signup-phone"
+                      type="tel"
+                      placeholder="Enter your phone number"
+                      required
+                    />
+                  </div>
+                  <small class="error-text" id="signup-phone-error"></small>
+
+                  <div id="signup-otp-group" hidden>
+                    <label for="signup-otp-code" class="sr-only">OTP Code</label>
+                    <div class="input-group">
+                        <input
+                            id="signup-otp-code"
+                            type="text"
+                            placeholder="Enter 6-digit OTP"
+                        />
+                    </div>
+                  </div>
+                  <button type="button" id="create-account-button" class="btn-submit">
+                    Create Account
+                  </button>
+                  <button type="button" id="verify-signup-otp-button" class="btn-submit" hidden>
+                    Verify & Create Account
+                  </button>
+                  </form>
+              </div>
+
+              <p class="signup-link">
+                By continuing, you agree to our
+             <a href="#" data-action="open-terms-conditions">Terms & Conditions</a>
+              </p>
+            </div>
+          </div>
+          <div class="login-hero-image">
+            <img
+              src="https://cdn.jsdelivr.net/gh/sankumardeep/pesonal-pic@main/Gemini_Generated_Image_ymo94bymo94bymo9.png"
+              alt="A team of diverse service professionals smiling"
+            />
+          </div>
+        </div>
+      </section>
+
+      <section class="services-section1">
+        <div class="container">
+          <h2 class="section-title">Our Services</h2>
+          <p class="section-subtitle">
+            Top-rated services, delivered by verified professionals.
+          </p>
+          <div class="service-category-tabs">
+            <button class="service-tab">Cleaning</button>
+            <button class="service-tab">Electrician</button>
+            <button class="service-tab">Painting</button>
+          </div>
+          <div class="services-grid">
+            <div class="service-card">
+              <img
+                src="https://images.unsplash.com/photo-1581578731548-c64695cc6952?q=80&w=2070"
+                alt="Home Cleaning"
+              />
+              <div class="service-info">
+                <h3>Deep Home Cleaning</h3>
+                <div class="service-rating">
+                  <span>⭐ 4.8</span> (1.2k reviews)
+                </div>
+                <p>Starts at ₹1,499</p>
+              </div>
+            </div>
+            <div class="service-card">
+              <img
+                src="https://images.unsplash.com/photo-1621905251189-08b45d6a269e?q=80&w=2070"
+                alt="Electrician"
+              />
+              <div class="service-info">
+                <h3>Electricians</h3>
+                <div class="service-rating">
+                  <span>⭐ 4.9</span> (3.5k reviews)
+                </div>
+                <p>Starts at ₹249</p>
+              </div>
+            </div>
+
+            <div class="service-card">
+              <img
+              src="https://cdn.jsdelivr.net/gh/sankumardeep/pesonal-pic@main/Gemini_Generated_Image_8nm2718nm2718nm2.png"
+              alt="Painter" />
+              <div class="service-info">
+                <h3>Wall Painting</h3>
+                <div class="service-rating">
+                  <span>⭐ 4.8</span> (950 reviews)
+                </div>
+                <p>Starts at ₹8/sq.ft</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="info-section">
+        <div class="container">
+          <h2 class="section-title">Why use OnClickSeva?</h2>
+          <div class="features-grid">
+            <div class="info-card">
+              <h3>Verified Professionals</h3>
+              <p>
+                Get skilled and background-checked professionals at your
+                doorstep. We've done the vetting so you don't have to.
+              </p>
+            </div>
+            <div class="info-card">
+              <h3>One-Click Convenience</h3>
+              <p>
+                Book any home service you need in just a few taps. From cleaning
+                to repairs, help is just a click away.
+              </p>
+            </div>
+            <div class="info-card">
+              <h3>Transparent Pricing</h3>
+              <p>
+                No hidden fees, no surprise charges. Get upfront pricing before
+                you book for complete peace of mind.
+              </p>
+            </div>
+            <div class="info-card">
+              <h3>Service Guarantee</h3>
+              <p>
+                Your satisfaction is our promise. We stand by the quality of our
+                work with a dedicated service guarantee.
+              </p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+
+
+      <section class="testimonials-section">
+        <div class="container">
+          <h2 class="section-title">Loved by customers</h2>
+          <div class="testimonials-grid">
+            <div class="testimonial-card">
+              <p>
+                "The electrician was on time, professional, and fixed the issue
+                within minutes. OnClickSeva is my go-to app for all home
+                services now!"
+              </p>
+              <div class="customer-profile">
+                <img
+                  src="https://randomuser.me/api/portraits/women/44.jpg"
+                  alt="Customer Avatar"
+                />
+                <div>
+                  <h4>Anjali Singh</h4>
+                  <span>Patna, Bihar</span>
+                </div>
+              </div>
+            </div>
+            <div class="testimonial-card">
+              <p>
+                "Booking a deep cleaning service was so easy. The team did an
+                impeccable job. My house has never been this clean. Highly
+                recommended."
+              </p>
+              <div class="customer-profile">
+                <img
+                  src="https://randomuser.me/api/portraits/men/32.jpg"
+                  alt="Customer Avatar"
+                />
+                <div>
+                  <h4>Rohan Verma</h4>
+                  <span>Patna, Bihar</span>
+                </div>
+              </div>
+            </div>
+            <div class="testimonial-card">
+              <p>
+                "I used their service for my AC repair. The technician was
+                knowledgeable and the pricing was completely transparent.
+                Fantastic experience."
+              </p>
+              <div class="customer-profile">
+                <img
+                  src="https://randomuser.me/api/portraits/men/46.jpg"
+                  alt="Customer Avatar"
+                />
+                <div>
+                  <h4>Prakash Kumar</h4>
+                  <span>Danapur, Patna</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <footer class="site-footer-rich">
+      <div class="container">
+        <div class="footer-main">
+          <div class="footer-column about">
+            <a href="#" class="footer-logo">
+              <img
+                src="https://raw.githubusercontent.com/sankumardeep/pesonal-pic/main/onclick%20logo.jpg"
+                alt="OnClickSeva Logo"
+              />
+              <span>OnClickSeva</span>
+            </a>
+            <p class="footer-tagline">
+              Your Home, Our Priority. The best professionals are just a click
+              away.
+            </p>
+            <div class="social-links">
+              <a href="#" aria-label="Facebook"
+                ><svg viewBox="0 0 24 24">
+                  <path
+                    d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"
+                  ></path></svg
+              ></a>
+             
+            <a href="https://www.instagram.com/onclickseva?igsh=OXg5dmhyMDRrZGFj" aria-label="Instagram"
+                ><svg viewBox="0 0 24 24">
+                  <rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect>
+                  <path
+                    d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"
+                  ></path>
+                  <line x1="17.5" y1="6.5" x2="17.51" y2="6.5"></line></svg
+              ></a>
+              <a href="https://www.linkedin.com/in/onclick-seva" aria-label="LinkedIn"
+                ><svg viewBox="0 0 24 24">
+                  <path
+                    d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"
+                  ></path>
+                  <rect x="2" y="9" width="4" height="12"></rect>
+                  <circle cx="4" cy="4" r="2"></circle></svg
+              ></a>
+            </div>
+          </div>
+
+          <div class="footer-column links">
+            <h4>Company</h4>
+            <ul>
+             <li><a href="#" data-action="open-about-us">About us</a></li>
+             <li><a href="#" data-action="open-careers">Careers</a></li>
+            
+            </ul>
+          </div>
+
+          <div class="footer-column links">
+            <h4>For Customers</h4>
+            <ul>
+              <li><a href="#" data-action="open-how-it-works">How it Works</a></li>
+              <li><a href="#" data-action="open-customer-support">Customer Support</a></li>
+              <li><a href="#" data-action="open-faq">FAQs</a></li>
+            </ul>
+          </div>
+
+          <div class="footer-column app-download">
+            <h4>Experience OnClickSeva App</h4>
+            <p>Get exclusive offers and a seamless booking experience.</p>
+            <div class="app-buttons">
+              <a href="#"
+                ><img
+                  src="https://upload.wikimedia.org/wikipedia/commons/thumb/7/78/Google_Play_Store_badge_EN.svg/2560px-Google_Play_Store_badge_EN.svg.png"
+                  alt="Get it on Google Play"
+              /></a>
+              <a href="#"
+                ><img
+                  src="https://upload.wikimedia.org/wikipedia/commons/thumb/3/3c/Download_on_the_App_Store_Badge.svg/2560px-Download_on_the_App_Store_Badge.svg.png"
+                  alt="Download on the App Store"
+              /></a>
+            </div>
+          </div>
+        </div>
+
+        <div class="footer-bottom1">
+          <p>© 2025 OnClickSeva. All Rights Reserved.</p>
+          <div class="policy-links">
+           <a href="#" data-action="open-privacy-policy">Privacy Policy</a>
+            <span>|</span>
+            <a href="#" data-action="open-terms-conditions">Terms & Conditions</a>
+          </div>
+        </div>
+      </div>
+    </footer>
+</div>
+ <div id="main-app-container" class="hidden">
+
+    <header>
+        <nav>
+            <div class="logo">
+                <img src="https://cdn.jsdelivr.net/gh/jhasonu7/music-core-api@main/Geminippp.png" alt="OnClickSeva Logo" class="brand-logo">
+                <a href="#home">OnClick</a>
+                <a2 href="#home">Seva</a2>
+            </div>
+            <div class="header-options">
+             <div class="option-item location" id="location-selector">
+    <i class="fas fa-map-marker-alt"></i>
+    <span id="location-display">Select Location</span>
+</div>
+  <div class="option-item search">
+    <input type="text" placeholder="Search Service..." id="search-input">
+    <i class="fas fa-search" id="search-icon"></i>
+    <div id="search-results-dropdown" class="search-results-dropdown hidden"></div>
+</div>
+               <div class="option-item cart" id="topCartIcon">
+    <i class="fas fa-shopping-cart"></i>
+    <span class="cart-badge" id="cart-count-badge">1</span>
+</div>
+              <div class="option-item profile" id="profile-icon">
+    <i class="fas fa-user-circle" id="default-profile-icon"></i>
+    <div class="profile-avatar hidden" id="profile-avatar">
+        <span id="profile-initial"></span>
+    </div>
+    <div class="profile-dropdown hidden" id="profile-dropdown">
+        <a href="#" id="help-link">Help Center</a>
+        <a href="#">My Bookings</a>
+        <a href="#" id="logout-btn">Log out</a>
+    </div>
+</div>
+            </div>
+        </nav>
+    </header>
+
+    <div id="main-content">
+        
+   <section id="home" class="hero-section">
+    <div class="hero-container">
+        <!-- UPDATED STRUCTURE FOR MOBILE LAYOUT -->
+        <div class="hero-text-content">
+            <img src="https://cdn.jsdelivr.net/gh/jhasonu7/music-core-api@main/Geminippp.png" alt="OnClickSeva Logo" class="hero-logo">
+            <!-- This new wrapper will become the card on mobile -->
+            <div class="hero-written-content">
+                <h1>Your Services, <br> On Click.</h1>
+                <p>Reliable and professional home services at your convenience, delivered by the best experts in Patna.</p>
+                <a href="#services" class="cta-button">Explore Services <i class="fas fa-arrow-right"></i></a>
+            </div>
+        </div>
+        <div class="hero-image-content">
+            <img src="https://images.unsplash.com/photo-1540518614846-7eded433c457?q=80&w=2057" alt="Modern and clean home interior">
+        </div>
+    </div>
+</section>
+
+        <section id="services" class="services-section">
+            <h2>Our Services</h2>
+           <div class="services-container">
+    <div class="general-service-card" data-category="cleaning">
+        <div class="gsc-image">
+            <img src="https://images.unsplash.com/photo-1581578731548-c64695cc6952?q=80&w=2070" alt="Professional cleaning service">
+        </div>
+        <div class="gsc-content">
+            <h3 class="gsc-title">Cleaning</h3>
+         
+            <ul class="gsc-highlights">
+                <li><i class="fas fa-check-circle"></i> Vetted Professionals</li>
+                <li><i class="fas fa-check-circle"></i> Eco-Friendly Options</li>
+                <li><i class="fas fa-check-circle"></i> Insured Service</li>
+            </ul>
+            <button class="gsc-button">View Services</button>
+        </div>
+    </div>
+
+ <div class="general-service-card" data-category="painting">
+        <div class="gsc-image">
+            <img src="https://cdn.jsdelivr.net/gh/sankumardeep/pesonal-pic@main/Gemini_Generated_Image_8nm2718nm2718nm2.png" alt="Professional painting a wall">
+        </div>
+        <div class="gsc-content">
+            <h3 class="gsc-title">Painting</h3>
+        
+            <ul class="gsc-highlights">
+                <li><i class="fas fa-check-circle"></i> On-time Completion</li>
+                <li><i class="fas fa-check-circle"></i> Top-Quality Paints</li>
+                <li><i class="fas fa-check-circle"></i> Post-Painting Cleanup</li>
+            </ul>
+            <button class="gsc-button">View Services</button>
+        </div>
+    </div>
+
+    <div class="general-service-card" data-category="electrician">
+        <div class="gsc-image">
+            <img src="https://images.unsplash.com/photo-1621905251189-08b45d6a269e?q=80&w=2070" alt="Professional electrician service">
+        </div>
+        <div class="gsc-content">
+            <h3 class="gsc-title">Electrician</h3>
+     
+            <ul class="gsc-highlights">
+                <li><i class="fas fa-check-circle"></i> Licensed Electricians</li>
+                <li><i class="fas fa-check-circle"></i> Safety Compliant</li>
+                <li><i class="fas fa-check-circle"></i> 30-Day Warranty</li>
+            </ul>
+            <button class="gsc-button">View Services</button>
+        </div>
+    </div>
+
+<div class="general-service-card" data-category="laundry">
+    <div class="gsc-image">
+        <img src="https://cdn.jsdelivr.net/gh/sankumardeep/pesonal-pic@main/Gemini_Generated_Image_ec6usrec6usrec6u.png" alt="Laundry service">
+    </div>
+    <div class="gsc-content">
+        <h3 class="gsc-title">Laundry</h3>
+        <ul class="gsc-highlights">
+            <li><i class="fas fa-check-circle"></i> Hygienic Cleaning</li>
+            <li><i class="fas fa-check-circle"></i> Premium Detergents</li>
+            <li><i class="fas fa-check-circle"></i> On-time Delivery</li>
+        </ul>
+        <button class="gsc-button">View Services</button>
+    </div>
+</div>
+</div>
+        </section>
+
+      <div class="most-booked-wrapper cleaning-theme">
+    <section id="most-booked-cleaning" class="services-section most-booked">
+        <h2>Pristine Homes, Happy Lives</h2>
+        <p class="section-subtitle">Our top-rated cleaning services trusted by thousands.</p>
+        <div class="slider-container">
+           <button class="slider-btn slider-btn-left">❮</button>
+            <div class="services-container slider-track">
+                </div>
+          <button class="slider-btn slider-btn-right">❯</button>
+        </div>
+    </section>
+</div>
+
+     <div class="most-booked-wrapper painting-theme">
+    <section id="most-booked-painting" class="services-section most-booked">
+        <h2>Add Colour to Your World</h2>
+        <p class="section-subtitle">Transform your space with a splash of perfection.</p>
+        <div class="slider-container">
+          <button class="slider-btn slider-btn-left">❮</button>
+<div class="services-container slider-track">
+    </div>
+<button class="slider-btn slider-btn-right">❯</button>
+        </div>
+    </section>
+</div>
+
+      <div class="most-booked-wrapper electrician-theme">
+    <section id="most-booked-electrician" class="services-section most-booked">
+        <div class="electrician-layout-container">
+            <div class="electrician-info-box">
+                <h2>Safety & Expertise, Guaranteed.</h2>
+                <p class="section-subtitle">Powering your home safely is our commitment.</p>
+                <ul>
+                    <li><i class="fas fa-shield-alt"></i> 30-Day Service Warranty</li>
+                    <li><i class="fas fa-user-check"></i> Background Verified Pros</li>
+                    <li><i class="fas fa-tools"></i> Genuine Parts & Fixed Prices</li>
+                </ul>
+            </div>
+            <div class="slider-wrapper">
+                <div class="slider-container">
+                 <button class="slider-btn slider-btn-left">❮</button>
+<div class="services-container slider-track">
+    </div>
+<button class="slider-btn slider-btn-right">❯</button>
+                </div>
+            </div>
+        </div>
+    </section>
+</div>
+     <div class="most-booked-wrapper laundry-theme">
+    <section id="most-booked-laundry" class="services-section most-booked">
+        <h2>Effortless Laundry Care</h2>
+        <p class="section-subtitle">Fresh, clean, and delivered right to your door.</p>
+        <div class="slider-container">
+          <button class="slider-btn slider-btn-left">❮</button>
+<div class="services-container slider-track">
+    </div>
+<button class="slider-btn slider-btn-right">❯</button>
+        </div>
+    </section>
+</div>
+    </div>
+
+ <aside id="services-sidebar">
+    <h4>Select a Service</h4>
+    <div id="services-sidebar-list">
+        </div>
+</aside>
+
+<div id="booking-details-modal" class="modal">
+    <button class="mobile-sidebar-toggle-btn" id="mobile-sidebar-toggle-btn">
+        <i class="fas fa-bars"></i>
+    </button>
+    <button class="mobile-cart-toggle-btn" id="mobile-cart-toggle-btn">
+        <i class="fas fa-shopping-cart"></i>
+        <span class="cart-badge" id="booking-cart-badge">0</span>
+    </button>
+
+    <div class="modal-content-wrapper">
+      <div class="modal-content booking-page-content" id="booking-details-content-area">
+    <span class="close-button">&times;</span>
+
+    <div class="your-booking-section">
+        </div>
+
+    <div class="recommended-services-section">
+        <h4 class="booking-section-title">You might also need</h4>
+        <div class="recommendations-wrapper">
+            </div>
+    </div>
+    </div>
+    </div>
+</div>
+<div id="location-modal" class="modal hidden">
+    <div class="location-modal-dialog">
+        <div class="location-modal-header">
+            <i class="fas fa-arrow-left" id="back-to-home-from-location"></i>
+           <div class="location-search-wrapper">
+    <input type="text" id="location-search-input" placeholder="Search for your location/society/apartment">
+    <i class="fas fa-times-circle clear-search-input hidden" id="clear-location-search"></i>
+    <div id="location-search-results" class="location-results-dropdown hidden">
+        </div>
+</div>
+            <span class="close-button" id="close-location-modal">&times;</span>
+        </div>
+
+        <div class="location-modal-body">
+            <div class="use-current-location-btn" id="use-current-location-btn">
+                <i class="fas fa-crosshairs"></i>
+                <span>Use current location</span>
+            </div>
+
+            <div class="location-section hidden" id="saved-locations-section">
+                <h4>Saved</h4>
+                <div id="saved-locations-list">
+                    </div>
+            </div>
+
+            <div class="location-section hidden" id="recent-locations-section">
+                <h4>Recents</h4>
+                <div id="recent-locations-list">
+                    </div>
+            </div>
+
+            <button class="add-new-address-btn hidden" id="add-new-address-btn">Add New Address</button>
+            <button class="confirm-selected-location-btn" id="confirm-selected-location-btn">Confirm Location</button>
+        </div>
+    </div>
+</div>
+
+<template id="service-template">
+        <div class="your-booking-card">
+            <div class="booking-card-details">
+                <h3 class="service-title" data-bind="name"></h3>
+                <div class="price-line">
+                    <span class="current-price" data-bind="price"></span>
+                    <del class="old-price" data-bind="oldPrice"></del>
+                    <span class="per-unit-price">
+                        <i class="fas fa-leaf"></i>
+                        <span data-bind="per-unit-price"></span>
+                    </span>
+                </div>
+                <div class="rating-line">
+                    <i class="fas fa-chevron-down"></i>
+                    <span class="star-rating" data-bind="rating"></span>
+                    <i class="fas fa-star"></i>
+                    <span class="review-count" data-bind="reviews"></span>
+                </div>
+                <p class="service-description-text" data-bind="description"></p>
+                <button class="add-to-cart-btn large-btn" data-service-id="">Add to Cart</button>
+            </div>
+            <div class="booking-card-image">
+                <img data-bind="image" src="" alt="Service Image">
+            </div>
+        </div>
+    </template>
+ <template id="recommendation-template">
+    <div class="recommendation-card" data-service-id="" data-service-category="">
+        <img data-bind="rec-image" src="" alt="">
+        <h4 data-bind="rec-name"></h4>
+        
+        <div class="rec-rating-line">
+            <span class="rating-star">★</span>
+            <span data-bind="rec-rating"></span>
+            <span data-bind="rec-reviews"></span>
+        </div>
+
+        <div class="rec-price-duration">
+            <span class="price">₹<span data-bind="rec-price"></span></span>
+            <span class="duration" data-bind="rec-duration"></span>
+        </div>
+        <div class="recommendation-add-button-container">
+            <button class="add-btn" data-service-id="">Add</button>
+        </div>
+    </div>
+</template>
+    
+    <section id="help-center-section" class="hidden about-us-view">
+    <div class="help-content-wrapper">
+        <div class="help-header">
+            <i class="fas fa-arrow-left" id="back-to-main"></i>
+            <h2>Help</h2>
+        </div>
+        <div class="help-topics">
+            <h3>All topics</h3>
+            <div class="topic-item" id="account-link">
+                <i class="fas fa-user-circle"></i>
+                <span>Account</span>
+                <i class="fas fa-chevron-right"></i>
+            </div>
+            <div class="topic-item" id="getting-started-link">
+                <i class="fas fa-bolt"></i>
+                <span>Getting started with OnClickSeva</span>
+                <i class="fas fa-chevron-right"></i>
+            </div>
+            <div class="topic-item" id="payment-link">
+                <i class="fas fa-credit-card"></i>
+                <span>Payment & OnClickSeva Credits</span>
+                <i class="fas fa-chevron-right"></i>
+            </div>
+            <div class="topic-item">
+                <i class="fas fa-star"></i>
+                <span>OnClickSeva Plus Membership</span>
+                <i class="fas fa-chevron-right"></i>
+            </div>
+            <div class="topic-item">
+                <i class="fas fa-shield-alt"></i>
+                <span>OnClickSeva Safety</span>
+                <i class="fas fa-chevron-right"></i>
+            </div>
+            <div class="topic-item">
+                <i class="fas fa-file-invoice"></i>
+                <span>Claim Warranty</span>
+                <i class="fas fa-chevron-right"></i>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section id="account-page" class="hidden about-us-view">
+    <div class="help-content-wrapper">
+        <div class="help-header">
+            <i class="fas fa-arrow-left" id="back-to-help-center"></i>
+            <h2>Account</h2>
+        </div>
+        <div class="help-topics">
+            <div class="faq-accordion">
+                <div class="faq-item">
+                    <button class="faq-question">
+                        <span>How do I change my phone number or email?</span>
+                        <i class="fas fa-chevron-down"></i>
+                    </button>
+                    <div class="faq-answer">
+                        <p>Currently, the ability to change your registered phone number or email is not available directly within the app. For assistance with account details, please contact our Customer Support team at <strong>support@onclickseva.com</strong>.</p>
+                    </div>
+                </div>
+                <div class="faq-item">
+                    <button class="faq-question">
+                        <span>Where can I check my saved addresses?</span>
+                        <i class="fas fa-chevron-down"></i>
+                    </button>
+                    <div class="faq-answer">
+                        <p>You can view and manage your saved addresses by clicking on the location selector at the top of the home screen. This will open the location modal where your 'Saved' and 'Recent' addresses are listed.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section id="getting-started-page" class="hidden about-us-view">
+    <div class="help-content-wrapper">
+        <div class="help-header">
+            <i class="fas fa-arrow-left" id="back-to-help-center-from-getting-started"></i>
+            <h2>Getting started with OnClickSeva</h2>
+        </div>
+        <div class="help-topics">
+            <div class="faq-accordion">
+                <div class="faq-item">
+                    <button class="faq-question">
+                        <span>What is OnClickSeva?</span>
+                        <i class="fas fa-chevron-down"></i>
+                    </button>
+                    <div class="faq-answer">
+                        <p>OnClickSeva is a technology platform dedicated to providing reliable, convenient, and high-quality home services in Bihar. We connect you with verified and skilled professionals for all your home needs, right at your doorstep.</p>
+                    </div>
+                </div>
+                <div class="faq-item">
+                    <button class="faq-question">
+                        <span>How to place a booking?</span>
+                        <i class="fas fa-chevron-down"></i>
+                    </button>
+                    <div class="faq-answer">
+                        <p>Booking is simple! Just follow these steps:<br>1. Select a service category from the home screen.<br>2. Browse the services and click 'Book now' on the one you need.<br>3. Customize your booking with any required add-ons.<br>4. Proceed to checkout to select a time slot and confirm your booking. It's that easy!</p>
+                    </div>
+                </div>
+                <div class="faq-item">
+                    <button class="faq-question">
+                        <span>Does OnClickSeva charge a cancellation fee?</span>
+                        <i class="fas fa-chevron-down"></i>
+                    </button>
+                    <div class="faq-answer">
+                        <p>Cancellations are free if done more than 12 hours before the scheduled service time or if a professional has not yet been assigned to your job. A nominal fee may be applicable for cancellations made outside these conditions. You can read our full policy on the <a href="#/terms-conditions">Terms & Conditions</a> page.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section id="payment-page" class="hidden about-us-view">
+    <div class="help-content-wrapper">
+        <div class="help-header">
+            <i class="fas fa-arrow-left" id="back-to-help-center-from-payment"></i>
+            <h2>Payment & OnClickSeva Credits</h2>
+        </div>
+        <div class="help-topics">
+            <div class="faq-accordion">
+                <div class="faq-item">
+                    <button class="faq-question">
+                        <span>What payment methods are available?</span>
+                        <i class="fas fa-chevron-down"></i>
+                    </button>
+                    <div class="faq-answer">
+                        <p>We currently offer <strong>Cash on Delivery (COD)</strong>. You can pay the professional in cash directly after the service is completed. We are working hard to integrate online payment methods like UPI, Credit/Debit cards soon!</p>
+                    </div>
+                </div>
+                <div class="faq-item">
+                    <button class="faq-question">
+                        <span>What are OnClickSeva Credits?</span>
+                        <i class="fas fa-chevron-down"></i>
+                    </button>
+                    <div class="faq-answer">
+                        <p>OnClickSeva Credits is a feature we are launching soon! It will be a wallet where you can store credits from refunds, referrals, and special offers. These credits can then be used to pay for future services on our platform.</p>
+                    </div>
+                </div>
+                <div class="faq-item">
+                    <button class="faq-question">
+                        <span>How does the referral program work?</span>
+                        <i class="fas fa-chevron-down"></i>
+                    </button>
+                    <div class="faq-answer">
+                        <p>Our referral program is coming soon! You will be able to share a unique code with your friends and family. When they book a service using your code, both you and your friend will receive OnClickSeva Credits as a reward. Stay tuned for the launch!</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+<section id="checkout-page" class="hidden">
+    <!-- This main container manages the sliding animation -->
+    <div id="checkout-flow-container">
+
+        <!-- [CORRECTED] Pane 1 is now the Details Pane (on the left) -->
+        <div id="checkout-details-pane" class="checkout-pane">
+             <div class="pane-scroll-content1">
+                <div class="checkout-details">
+                     <!-- The main checkout details (address, slot, etc.) will be rendered here by JS -->
+                </div>
+            </div>
+        </div>
+
+        <!-- [CORRECTED] Pane 2 is now the Summary Pane (on the right) -->
+        <div id="checkout-summary-pane" class="checkout-pane">
+            <div class="checkout-header">
+                <i class="fas fa-arrow-left" id="back-to-main-from-checkout"></i>
+                <div class="checkout-logo">
+                    <img src="https://raw.githubusercontent.com/sankumardeep/pesonal-pic/main/onclick%20logo.jpg" alt="OCS Logo">
+                    <h2>Checkout</h2>
+                </div>
+            </div>
+            <div class="pane-scroll-content">
+                <!-- Content for the summary goes here. -->
+                <div id="summary-pane-content" class="checkout-summary">
+                    <!-- This will be populated by JavaScript -->
+                </div>
+            </div>
+            <div class="summary-pane-footer">
+                <button id="proceed-to-details-btn" class="checkout-btn">
+                    <span id="proceed-total-amount">₹0</span>
+                    <span>Proceed to Details</span>
+                </button>
+            </div>
+        </div>
+
+    </div>
+</section>
+<aside id="cartSidebar" class="cart-sidebar">
+    <div class="cart-header-container">
+        <i class="fas fa-arrow-left cart-back-btn" id="cart-back-btn"></i>
+        <h3 id="cart-title">Cart</h3>
+    </div>
+    
+    <div id="cart-content-area">
+        <div id="cart-items-container">
+            <p class="empty-cart-message">Your cart is empty.</p>
+        </div>
+        <div class="cart-summary">
+            <button class="checkout-btn">Proceed to Checkout</button>
+            <div id="cart-promo-container"></div>
+        </div>
+    </div>
+</aside>
+
+<div id="overlay" class="overlay"></div>
+<div id="my-bookings-modal" class="modal hidden">
+        <div class="cart-modal-content" style="max-width: 700px;"> <div class="cart-modal-header">
+                <span class="close-modal-btn" id="close-my-bookings-modal">&larr;</span>
+                <h2 class="modal-title">My Bookings</h2>
+            </div>
+            <div id="my-bookings-list-container" class="help-topics" style="padding: 20px; overflow-y: auto;">
+                </div>
+        </div>
+    </div>
+
+<section id="booking-details-popup" class="hidden">
+    <div class="checkout-header">
+        <i class="fas fa-arrow-left" id="back-to-bookings-list"></i>
+        <h2>Booking Details</h2>
+        <button class="go-home-btn" id="go-to-home-from-details">Go to Home</button>
+    </div>
+    <div class="booking-details-container">
+        <div id="booking-details-popup-content"></div>
+    </div>
+</section>
+
+
+   <footer class="site-footer-rich">
+      <div class="container">
+        <div class="footer-main">
+          <div class="footer-column about">
+            <a href="#" class="footer-logo">
+              <img
+                src="https://raw.githubusercontent.com/sankumardeep/pesonal-pic/main/onclick%20logo.jpg"
+                alt="OnClickSeva Logo"
+              />
+              <span>OnClickSeva</span>
+            </a>
+            <p class="footer-tagline">
+              Your Home, Our Priority. The best professionals are just a click
+              away.
+            </p>
+            <div class="social-links">
+              <a href="#" aria-label="Facebook"
+                ><svg viewBox="0 0 24 24">
+                  <path
+                    d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"
+                  ></path></svg
+              ></a>
+            
+          <a href="https://www.instagram.com/onclickseva?igsh=OXg5dmhyMDRrZGFj" aria-label="Instagram"
+                ><svg viewBox="0 0 24 24">
+                  <rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect>
+                  <path
+                    d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"
+                  ></path>
+                  <line x1="17.5" y1="6.5" x2="17.51" y2="6.5"></line></svg
+              ></a>
+              <a href="https://www.linkedin.com/in/onclick-seva" aria-label="LinkedIn"
+                ><svg viewBox="0 0 24 24">
+                  <path
+                    d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"
+                  ></path>
+                  <rect x="2" y="9" width="4" height="12"></rect>
+                  <circle cx="4" cy="4" r="2"></circle></svg
+              ></a>
+            </div>
+          </div>
+
+          <div class="footer-column links">
+            <h4>Company</h4>
+            <ul>
+           <li><a href="#" data-action="open-about-us">About us</a></li>
+             <li><a href="#" data-action="open-careers">Careers</a></li>
+            </ul>
+          </div>
+
+          <div class="footer-column links">
+            <h4>For Customers</h4>
+            <ul>
+              <li><a href="#" data-action="open-how-it-works">How it Works</a></li>
+              <li><a href="#" data-action="open-customer-support">Customer Support</a></li>
+             <li><a href="#" data-action="open-faq">FAQs</a></li>
+            </ul>
+          </div>
+
+          <div class="footer-column app-download">
+            <h4>Experience OnClickSeva App</h4>
+            <p>Get exclusive offers and a seamless booking experience.</p>
+            <div class="app-buttons">
+              <a href="#"
+                ><img
+                  src="https://upload.wikimedia.org/wikipedia/commons/thumb/7/78/Google_Play_Store_badge_EN.svg/2560px-Google_Play_Store_badge_EN.svg.png"
+                  alt="Get it on Google Play"
+              /></a>
+              <a href="#"
+                ><img
+                  src="https://upload.wikimedia.org/wikipedia/commons/thumb/3/3c/Download_on_the_App_Store_Badge.svg/2560px-Download_on_the_App_Store_Badge.svg.png"
+                  alt="Download on the App Store"
+              /></a>
+            </div>
+          </div>
+        </div>
+
+        <div class="footer-bottom1">
+          <p>© 2025 OnClickSeva. All Rights Reserved.</p>
+          <div class="policy-links">
+          <a href="#" data-action="open-privacy-policy">Privacy Policy</a>
+            <span>|</span>
+           <a href="#" data-action="open-terms-conditions">Terms & Conditions</a>
+          </div>
+        </div>
+      </div>
+    </footer>
+      
+
+        <div id="slot-selection-modal" class="modal hidden">
+    <div class="slot-modal-content">
+        <div class="slot-modal-header">
+            <h3>When should the professional arrive?</h3>
+            <p>Service will take approx. 2 hrs & 15 mins</p>
+            <span class="close-button" id="close-slot-modal">&times;</span>
+        </div>
+        <div class="slot-modal-body">
+            <h4>Select a date</h4>
+            <div id="date-selection-container" class="date-tabs">
+                </div>
+
+            <h4>Select a start time</h4>
+            <div id="time-selection-container" class="time-slots">
+                </div>
+        </div>
+        <div class="slot-modal-footer">
+            <button id="confirm-slot-btn" class="confirm-slot-btn" disabled>Proceed to checkout</button>
+        </div>
+    </div>
+</div>
+
+<div id="payment-modal" class="modal hidden">
+    <div class="payment-modal-content">
+        <div class="payment-modal-header">
+            <h3>Select Payment Method</h3>
+            <span class="close-button" id="close-payment-modal">&times;</span>
+        </div>
+        <div class="payment-modal-body">
+            <div class="payment-option selected" id="cod-option" data-method="COD">
+                <i class="fas fa-money-bill-wave"></i>
+                <div class="payment-details">
+                    <h4>Cash on Delivery</h4>
+                    <p>Pay the professional directly after the service.</p>
+                </div>
+                <i class="fas fa-check-circle"></i>
+            </div>
+        </div>
+        <div class="payment-modal-footer">
+            <button id="confirm-service-btn" class="checkout-btn">Confirm Service</button>
+        </div>
+    </div>
+</div>
+
+
+<!-- index.html - ADD THIS NEW MODAL -->
+
+<div id="rating-modal" class="modal hidden">
+    <div class="rating-modal-content">
+        <div class="modal-header">
+            <h3>Rate Your Service</h3>
+            <span class="close-modal-btn" id="close-rating-modal">&times;</span>
+        </div>
+        <div class="modal-body">
+            <p>Your feedback helps us improve. Please rate the professional for this service.</p>
+            <div class="rating-stars-container">
+                <div class="rating-stars" id="rating-stars">
+                    <i class="fas fa-star star" data-value="1"></i>
+                    <i class="fas fa-star star" data-value="2"></i>
+                    <i class="fas fa-star star" data-value="3"></i>
+                    <i class="fas fa-star star" data-value="4"></i>
+                    <i class="fas fa-star star" data-value="5"></i>
+                </div>
+            </div>
+            <div class="feedback-container">
+                <textarea id="feedback-textarea" placeholder="Share your experience... (optional)"></textarea>
+            </div>
+            <button id="submit-rating-btn" class="checkout-btn">Submit Rating</button>
+        </div>
+    </div>
+</div>
+
+<div id="service-deep-details-modal" class="modal hidden">
+    <div class="deep-details-dialog">
+
+      <div class="deep-details-header">
+            <h3 id="deep-details-title">Service Details</h3>
+
+            <div id="header-action-container">
+                <button class="add-to-cart-header-btn" id="header-add-to-cart-btn" data-service-id="">Add</button>
+                <div class="quantity-picker-wrapper hidden" id="header-quantity-picker" data-service-id="">
+                    <div class="quantity-picker">
+                        <button class="decrease-quantity-btn" id="decrease-header-qty">-</button>
+                        <span id="header-quantity-display">1</span>
+                        <button class="increase-quantity-btn" id="increase-header-qty">+</button>
+                    </div>
+                </div>
+            </div>
+            </div>
+
+        <div class="deep-details-content" id="service-deep-details-content">
+            </div>
+
+        <div class="floating-header-controls">
+            <button class="floating-btn" id="floating-back-btn"><i class="fas fa-arrow-left"></i></button>
+            <button class="floating-btn" id="floating-share-btn"><i class="fas fa-share-alt"></i></button>
+        </div>
+
+    </div>
+</div>
+    </footer>
+   
+
+    <div id="yourCartModal" class="modal-overlay hidden">
+    <div class="cart-modal-content1">
+        <div class="cart-modal-header">
+            <span class="close-modal-btn" id="closeCartModalBtn">&larr;</span> <h2 class="modal-title">Your cart</h2>
+        </div>
+        
+        <div id="full-cart-display-container">
+            </div>
+        
+     
+    </div>
+</div>
+<div id="booking-confirmation-modal" class="modal hidden">
+    <div class="confetti-container">
+        <div class="confetti-piece"></div><div class="confetti-piece"></div>
+        <div class="confetti-piece"></div><div class="confetti-piece"></div>
+        <div class="confetti-piece"></div><div class="confetti-piece"></div>
+        <div class="confetti-piece"></div><div class="confetti-piece"></div>
+        <div class="confetti-piece"></div><div class="confetti-piece"></div>
+        <div class="confetti-piece"></div><div class="confetti-piece"></div>
+        <div class="confetti-piece"></div>
+    </div>
+
+    <div class="confirmation-modal-content">
+
+        <div class="modal-header">
+            <div class="confirmation-icon-container">
+                <svg class="confirmation-checkmark" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 52 52">
+                    <circle class="checkmark-circle" cx="26" cy="26" r="25" fill="none"/>
+                    <path class="checkmark-check" fill="none" d="M14.1 27.2l7.1 7.2 16.7-16.8"/>
+                </svg>
+            </div>
+            <h2>Booking Confirmed!</h2>
+        </div>
+
+        <div class="modal-body">
+            <p>Thank you for choosing OnClickSeva. Your service is on its way.</p>
+            <p id="savings-message" class="savings-message">You saved ₹150 on this order!</p>
+          <div class="order-summary-box" style="margin-top: 20px; text-align: left;">
+    <h4 style="text-align: center;">Order Summary</h4>
+    <div id="confirmation-summary-items"></div>
+    
+    <div class="summary-total" style="display: flex; justify-content: space-between; padding-top: 10px; margin-top: 10px; border-top: 1px solid #ddd; font-weight: bold;">
+        <span>Total</span> 
+        <span id="confirmation-total-amount">₹0</span>
+    </div>
+</div>
+        </div>
+
+        <div class="modal-footer">
+            <div class="confirmation-buttons">
+                <button id="confirmation-go-home" class="confirmation-btn secondary-btn">Go to Home</button>
+                <button id="confirmation-go-bookings" class="confirmation-btn primary-btn">My Bookings</button>
+            </div>
+        </div>
+
+    </div>
+</div>
+<div id="addon-selection-modal" class="modal hidden">
+    <div class="addon-modal-content">
+        <div class="addon-modal-header" id="addon-main-service-header">
+            <div class="addon-header-service-info">
+                <img src="" alt="Service Image" class="addon-header-image" data-bind="addon-header-image">
+                <div class="addon-header-details">
+                    <span class="addon-header-context">Added to cart</span>
+                    <h4 class="addon-header-name" data-bind="addon-header-name">Service Name</h4>
+                </div>
+            </div>
+            <div class="addon-header-actions">
+                <button class="add-btn" id="addon-header-add-btn" data-service-id="">Add</button>
+                <div class="quantity-picker-wrapper hidden" id="addon-header-qty-picker" data-service-id="">
+                    <div class="quantity-picker">
+                        <button class="decrease-addon-header-qty">-</button>
+                        <span id="addon-header-qty-display">1</span>
+                        <button class="increase-addon-header-qty">+</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="addon-modal-body" id="addon-list-container">
+            </div>
+        <div class="addon-modal-footer">
+            <button id="done-with-addons-btn" class="checkout-btn">Done</button>
+        </div>
+    </div>
+</div>
+
+<template id="addon-popup-item-template">
+    <div class="addon-popup-item">
+        <div class="addon-details">
+            <div class="addon-name" data-bind="addon-name"></div>
+            <div class="addon-description" data-bind="addon-desc"></div>
+            <div class="addon-price" data-bind="addon-price"></div>
+        </div>
+        <div class="addon-actions-container">
+            </div>
+    </div>
+</template>
+</div>
+<div id="about-us-modal" class="modal hidden about-us-view">
+    <div class="about-us-content">
+
+       <header class="about-us-header">
+    <nav>
+        <div class="logo">
+            <img src="https://raw.githubusercontent.com/sankumardeep/pesonal-pic/main/onclick%20logo.jpg" alt="OnClickSeva Logo" class="brand-logo">
+            <a href="#home">OnClickSeva</a>
+        </div>
+        <div class="header-options">
+            <div class="option-item profile hidden" id="about-us-profile-icon-wrapper">
+                <div class="option-item profile" id="about-us-profile-icon">
+                    <div class="profile-avatar" id="about-us-profile-avatar">
+                        <span id="about-us-profile-initial"></span>
+                    </div>
+                </div>
+                <div class="profile-dropdown hidden" id="about-us-profile-dropdown">
+                    <a href="#" class="about-nav-link" data-target-hash="#/my-bookings">My Bookings</a>
+                    <a href="#" class="about-nav-link" data-target-hash="#/help">Help</a>
+                    <a href="#" id="about-header-logout-btn">Logout</a>
+                </div>
+            </div>
+            <div id="about-us-guest-header">
+                <a href="#" id="about-header-login-btn" class="about-header-login-btn">Login / Sign up</a>
+            </div>
+        </div>
+    </nav>
+</header>
+     
+        <div class="about-main-content">
+            <div class="about-container">
+                <section class="about-hero">
+                    <h1>About OnClickSeva</h1>
+                    <p>Building the future of home services in Bihar, one click at a time. We are committed to bringing reliability, quality, and convenience right to your doorstep.</p>
+                </section>
+
+                <section class="content-section fade-in-section">
+                    <div class="content-text">
+                        <h2>Who We Are</h2>
+                        <p>Founded in Patna, OnClickSeva was born from a simple idea: home services should be easy, transparent, and trustworthy. We are a technology-driven platform connecting you with skilled, verified, and reliable professionals for all your home needs, starting with our local communities.</p>
+                    </div>
+                    <div class="content-image">
+                        <img src="https://images.unsplash.com/photo-1542744173-8e7e53415bb0?q=80&w=2070" alt="OnClickSeva team collaborating in an office">
+                    </div>
+                </section>
+
+                <section class="stats-section fade-in-section">
+                    <div class="stat-item">
+                        <h3>1,000+</h3>
+                        <p>Happy Customers</p>
+                    </div>
+                    <div class="stat-item">
+                        <h3>50+</h3>
+                        <p>Verified Professionals</p>
+                    </div>
+                    <div class="stat-item">
+                        <h3>12+</h3>
+                        <p>Service Categories</p>
+                    </div>
+                    <div class="stat-item">
+                        <h3>4.9/5</h3>
+                        <p>Average Rating</p>
+                    </div>
+                </section>
+
+                <section class="team-section fade-in-section">
+                    <h2>Our Leadership Team</h2>
+                    <p>Meet the minds dedicated to revolutionizing home services in our region.</p>
+                    <div class="team-grid">
+                      <div class="team-member">
+    <img src="https://images.unsplash.com/photo-1560250097-0b93528c311a?q=80&w=1887" alt="Portrait of Sonu Kumar">
+    <h4>Sonu Kumar</h4>
+    <p>Founder & Co-CEO</p>
+</div>
+<div class="team-member">
+    <img src="https://images.unsplash.com/photo-1557862921-37829c790f19?q=80&w=2071" alt="Portrait of Sandeep Kumar">
+    <h4>Sandeep Kumar</h4>
+    <p>Founder & Co-CEO</p>
+</div>
+                       
+                    </div>
+                </section>
+
+                <section class="cta-section fade-in-section">
+                    <h2>You could be a part of our journey.</h2>
+                    <p>We are always looking for passionate individuals and skilled professionals to join our mission.</p>
+                    <a href="#" class="apply-now-btn">Apply Now</a>
+                </section>
+
+                <section class="locations-section fade-in-section">
+                    <h2>Currently Live In</h2>
+                    <div class="locations-grid">
+                        <span>Patna</span>
+                        <span>Danapur</span>
+                        <span>Phulwari Sharif</span>
+                        <span>Bihta</span>
+                        <span>Hajipur</span>
+                        <span>Muzaffarpur</span>
+                    </div>
+                </section>
+            </div>
+        </div>
+    </div>
+</div>
+<div id="privacy-policy-modal" class="modal hidden about-us-view">
+    <div class="about-us-content">
+
+        <header class="about-us-header">
+            <nav>
+                <div class="logo">
+                    <img src="https://raw.githubusercontent.com/sankumardeep/pesonal-pic/main/onclick%20logo.jpg" alt="OnClickSeva Logo" class="brand-logo">
+                    <a href="#home">OnClickSeva</a>
+                </div>
+                <div class="header-options">
+                    <div class="option-item profile hidden" id="privacy-policy-profile-icon-wrapper">
+                        <div class="option-item profile" id="privacy-policy-profile-icon">
+                            <div class="profile-avatar" id="privacy-policy-profile-avatar">
+                                <span id="privacy-policy-profile-initial"></span>
+                            </div>
+                        </div>
+                        <div class="profile-dropdown hidden" id="privacy-policy-profile-dropdown">
+                            <a href="#" class="about-nav-link" data-target-hash="#/my-bookings">My Bookings</a>
+                            <a href="#" class="about-nav-link" data-target-hash="#/help">Help</a>
+                            <a href="#" id="privacy-policy-header-logout-btn">Logout</a>
+                        </div>
+                    </div>
+                    <div id="privacy-policy-guest-header">
+                        <a href="#" id="privacy-policy-header-login-btn" class="about-header-login-btn">Login / Sign up</a>
+                    </div>
+                </div>
+            </nav>
+        </header>
+        
+   
+
+        <div class="about-main-content">
+            <div class="about-container">
+
+                <div class="language-selector-container">
+                    <button id="lang-en-btn" class="language-btn active">English</button>
+                    <button id="lang-hi-btn" class="language-btn">हिन्दी</button>
+                </div>
+
+                <div id="privacy-content-en" class="privacy-language-content active">
+                    <div class="privacy-policy-content">
+                        <h1>Privacy Policy</h1> 
+                        <p><strong>Last Updated: October 15, 2025</strong></p>
+                        <p>Welcome to OnClickSeva! Your privacy is critically important to us. This Privacy Policy explains how we collect, use, and share information about you when you use our services.</p>
+                        
+                        <h4>1. Information We Collect</h4>
+                        <p>To provide and improve our services, we collect:</p>
+                        <ul>
+                            <li><strong>Personal Information:</strong> Your name, email, phone number, and physical address.</li>
+                            <li><strong>Booking Information:</strong> Service details, date, time, and payment info.</li>
+                            <li><strong>Location Data:</strong> To connect you with nearby professionals.</li>
+                            <li><strong>Device and Usage Information:</strong> IP address, browser type, and interactions with our platform to enhance user experience.</li>
+                            <li><strong>Communications:</strong> Records of your chats and calls with customer support.</li>
+                            <li><strong>Cookies:</strong> We use cookies to remember your preferences and for analytics.</li>
+                        </ul>
+
+                        <h4>2. How We Use Your Information</h4>
+                        <p>Your information is used to:</p>
+                        <ul>
+                            <li>Provide, maintain, and improve our services.</li>
+                            <li>Schedule and dispatch professionals.</li>
+                            <li>Process payments and send confirmations.</li>
+                            <li>Communicate with you about bookings, offers, and updates.</li>
+                            <li>Ensure safety and security for both customers and professionals.</li>
+                        </ul>
+
+                        <h4>3. How We Share Your Information</h4>
+                        <p>We do not sell your personal data. Sharing is limited to:</p>
+                        <ul>
+                            <li><strong>Service Professionals:</strong> Sharing necessary details (name, address) for them to perform the service.</li>
+                            <li><strong>Payment Processors:</strong> Sharing transaction information with secure third-party payment gateways.</li>
+                            <li><strong>For Legal Reasons:</strong> If required by law or to protect user safety.</li>
+                        </ul>
+
+                        <h4>4. Data Security</h4>
+                        <p>We use reasonable technical and physical security measures to protect your information. However, no method of transmission over the Internet is 100% secure.</p>
+                        
+                        <h4>5. Data Retention</h4>
+                        <p>We retain your personal data for as long as your account is active or as needed to provide you services and comply with our legal obligations.</p>
+
+                        <h4>6. Your Rights & Choices</h4>
+                        <p>You can access and update your profile information. You can also request the deletion of your account. You may opt-out of marketing communications by following the unsubscribe instructions in our emails.</p>
+
+                        <h4>7. Children's Privacy</h4>
+                        <p>Our services are not intended for individuals under the age of 18. We do not knowingly collect personal information from children.</p>
+
+                        <h4>8. Changes to This Policy</h4>
+                        <p>We may update this policy. We will notify you of any changes by posting the new policy on this page and updating the "Last Updated" date.</p>
+
+                        <h4>9. Contact Us</h4>
+                        <p>If you have questions, please contact us at: <strong>support@onclickseva.com</strong></p>
+                    </div>
+                </div>
+
+                <div id="privacy-content-hi" class="privacy-language-content">
+                    <div class="privacy-policy-content">
+                        <h1>गोपनीयता नीति</h1>
+                        <p><strong>अंतिम अपडेट: 15 अक्टूबर, 2025</strong></p>
+                        <p>OnClickSeva में आपका स्वागत है! आपकी गोपनीयता हमारे लिए अत्यंत महत्वपूर्ण है। यह गोपनीयता नीति बताती है कि जब आप हमारी सेवाओं का उपयोग करते हैं तो हम आपके बारे में जानकारी कैसे एकत्र, उपयोग और साझा करते हैं।</p>
+                        
+                        <h4>1. हम जो जानकारी एकत्र करते हैं</h4>
+                        <p>हमारी सेवाओं को प्रदान करने और बेहतर बनाने के लिए, हम एकत्र करते हैं:</p>
+                        <ul>
+                            <li><strong>व्यक्तिगत जानकारी:</strong> आपका नाम, ईमेल, फ़ोन नंबर और भौतिक पता।</li>
+                            <li><strong>बुकिंग जानकारी:</strong> सेवा विवरण, दिनांक, समय और भुगतान की जानकारी।</li>
+                            <li><strong>स्थान डेटा:</strong> आपको आस-पास के पेशेवरों से जोड़ने के लिए।</li>
+                            <li><strong>डिवाइस और उपयोग की जानकारी:</strong> उपयोगकर्ता अनुभव को बढ़ाने के लिए आईपी पता, ब्राउज़र प्रकार और हमारे प्लेटफ़ॉर्म के साथ इंटरैक्शन।</li>
+                            <li><strong>संचार:</strong> ग्राहक सहायता के साथ आपकी चैट और कॉल का रिकॉर्ड।</li>
+                            <li><strong>कुकीज़:</strong> हम आपकी प्राथमिकताओं को याद रखने और विश्लेषण के लिए कुकीज़ का उपयोग करते हैं।</li>
+                        </ul>
+
+                        <h4>2. हम आपकी जानकारी का उपयोग कैसे करते हैं</h4>
+                        <p>आपकी जानकारी का उपयोग किया जाता है:</p>
+                        <ul>
+                            <li>हमारी सेवाओं को प्रदान करने, बनाए रखने और बेहतर बनाने के लिए।</li>
+                            <li>पेशेवरों को शेड्यूल और डिस्पैच करने के लिए।</li>
+                            <li>भुगतान संसाधित करने और पुष्टिकरण भेजने के लिए।</li>
+                            <li>बुकिंग, ऑफ़र और अपडेट के बारे में आपसे संवाद करने के लिए।</li>
+                            <li>ग्राहकों और पेशेवरों दोनों के लिए सुरक्षा सुनिश्चित करने के लिए।</li>
+                        </ul>
+
+                        <h4>3. हम आपकी जानकारी कैसे साझा करते हैं</h4>
+                        <p>हम आपका व्यक्तिगत डेटा नहीं बेचते हैं। साझाकरण सीमित है:</p>
+                        <ul>
+                            <li><strong>सेवा पेशेवर:</strong> सेवा करने के लिए आवश्यक विवरण (नाम, पता) साझा करना।</li>
+                            <li><strong>भुगतान प्रोसेसर:</strong> सुरक्षित तृतीय-पक्ष भुगतान गेटवे के साथ लेनदेन की जानकारी साझा करना।</li>
+                            <li><strong>कानूनी कारणों से:</strong> यदि कानून द्वारा आवश्यक हो या उपयोगकर्ता सुरक्षा की रक्षा के लिए।</li>
+                        </ul>
+
+                        <h4>4. डेटा सुरक्षा</h4>
+                        <p>हम आपकी जानकारी की सुरक्षा के लिए उचित तकनीकी और भौतिक सुरक्षा उपायों का उपयोग करते हैं। हालाँकि, इंटरनेट पर प्रसारण का कोई भी तरीका 100% सुरक्षित नहीं है।</p>
+                        
+                        <h4>5. डेटा प्रतिधारण</h4>
+                        <p>हम आपके व्यक्तिगत डेटा को तब तक बनाए रखते हैं जब तक आपका खाता सक्रिय रहता है या आपको सेवाएं प्रदान करने और हमारे कानूनी दायित्वों का पालन करने के लिए आवश्यक होता है।</p>
+
+                        <h4>6. आपके अधिकार और विकल्प</h4>
+                        <p>आप अपनी प्रोफ़ाइल जानकारी तक पहुँच और उसे अपडेट कर सकते हैं। आप अपने खाते को हटाने का भी अनुरोध कर सकते हैं। आप हमारे ईमेल में दिए गए अनसब्सक्राइब निर्देशों का पालन करके मार्केटिंग संचार से ऑप्ट-आउट कर सकते हैं।</p>
+
+                        <h4>7. बच्चों की गोपनीयता</h4>
+                        <p>हमारी सेवाएं 18 वर्ष से कम आयु के व्यक्तियों के लिए नहीं हैं। हम जानबूझकर बच्चों से व्यक्तिगत जानकारी एकत्र नहीं करते हैं।</p>
+
+                        <h4>8. इस नीति में परिवर्तन</h4>
+                        <p>हम इस नीति को अपडेट कर सकते हैं। हम इस पृष्ठ पर नई नीति पोस्ट करके और "अंतिम अपडेट" की तारीख को अपडेट करके आपको किसी भी बदलाव के बारे में सूचित करेंगे।</p>
+
+                        <h4>9. हमसे संपर्क करें</h4>
+                        <p>यदि आपके कोई प्रश्न हैं, तो कृपया हमसे संपर्क करें: <strong>support@onclickseva.com</strong></p>
+                    </div>
+                </div>
+                </div>
+        </div>
+    </div>
+</div>
+
+<div id="terms-conditions-modal" class="modal hidden about-us-view">
+    <div class="about-us-content">
+
+        <header class="about-us-header">
+            <nav>
+                <div class="logo">
+                    <img src="https://raw.githubusercontent.com/sankumardeep/pesonal-pic/main/onclick%20logo.jpg" alt="OnClickSeva Logo" class="brand-logo">
+                    <a href="#home">OnClickSeva</a>
+                </div>
+                <div class="header-options">
+                    <div class="option-item profile hidden" id="terms-profile-icon-wrapper">
+                        <div class="option-item profile" id="terms-profile-icon">
+                            <div class="profile-avatar" id="terms-profile-avatar">
+                                <span id="terms-profile-initial"></span>
+                            </div>
+                        </div>
+                        <div class="profile-dropdown hidden" id="terms-profile-dropdown">
+                            <a href="#" class="about-nav-link" data-target-hash="#/my-bookings">My Bookings</a>
+                            <a href="#" class="about-nav-link" data-target-hash="#/help">Help</a>
+                            <a href="#" id="terms-header-logout-btn">Logout</a>
+                        </div>
+                    </div>
+                    <div id="terms-guest-header">
+                        <a href="#" id="terms-header-login-btn" class="about-header-login-btn">Login / Sign up</a>
+                    </div>
+                </div>
+            </nav>
+        </header>
+        
+       
+
+        <div class="about-main-content">
+            <div class="about-container">
+
+                <div class="language-selector-container">
+                    <button id="terms-lang-en-btn" class="language-btn active">English</button>
+                    <button id="terms-lang-hi-btn" class="language-btn">हिन्दी</button>
+                </div>
+
+                <div id="terms-content-en" class="terms-language-content active">
+                    <div class="privacy-policy-content">
+                        <h1>Terms and Conditions</h1>
+                        <p><strong>Effective Date: October 15, 2025</strong></p>
+                        <p>Please read these Terms and Conditions ("Terms") carefully. By accessing or using the OnClickSeva platform (the "Service"), you agree to be bound by these Terms and our Privacy Policy.</p>
+                        
+                        <h4>1. The OnClickSeva Platform</h4>
+                        <p>OnClickSeva is a technology platform that connects users ("You") with independent third-party service providers ("Professionals"). YOU ACKNOWLEDGE THAT ONCLICKSEVA DOES NOT PROVIDE HOME SERVICES OR FUNCTION AS A HOME SERVICE PROVIDER. OUR SERVICE IS TO FACILITATE YOUR CONNECTION TO PROFESSIONALS. WE ARE NOT AN EMPLOYER OF ANY PROFESSIONAL.</p>
+
+                        <h4>2. User Obligations and Prohibited Conduct</h4>
+                        <p>As a user, you agree to:</p>
+                        <ul>
+                            <li>Provide accurate and complete information during registration and booking.</li>
+                            <li>Treat Professionals with respect and courtesy.</li>
+                            <li>Ensure a safe and appropriate environment for Professionals to perform their work.</li>
+                            <li>Not use the Service for any unlawful purpose, including but not limited to requesting services for illegal activities, harassment, or fraudulent purposes.</li>
+                        </ul>
+
+                        <h4>3. Background Checks and Vetting Disclaimer</h4>
+                        <p>OnClickSeva may perform a background check on Professionals, which may include identity verification and criminal record checks. However, we do not guarantee the accuracy, completeness, or currency of such checks. We are not responsible for any false or misleading statements made by Professionals. You agree that OnClickSeva is not liable for the actions, misconduct, or criminal acts of any Professional.</p>
+
+                        <h4>4. Limitation of Liability</h4>
+                        <p>TO THE FULLEST EXTENT PERMITTED BY APPLICABLE LAW, ONCLICKSEVA SHALL NOT BE LIABLE FOR INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, PUNITIVE, OR CONSEQUENTIAL DAMAGES, INCLUDING LOST PROFITS, LOST DATA, PERSONAL INJURY, OR PROPERTY DAMAGE RELATED TO, IN CONNECTION WITH, OR OTHERWISE RESULTING FROM ANY USE OF THE SERVICES.</p>
+                        <p>ONCLICKSEVA SHALL NOT BE LIABLE FOR ANY DAMAGES, LIABILITY, OR LOSSES ARISING OUT OF:</p>
+                        <ul>
+                           <li>Your use of or reliance on the Services or your inability to access or use the Services.</li>
+                           <li>Any transaction or relationship between you and any Professional, even if we have been advised of the possibility of such damages.</li>
+                           <li>The conduct, actions, or inactions of any Professional. This includes, but is not limited to, theft, assault, or any other criminal act.</li>
+                        </ul>
+                        <p>IN NO EVENT SHALL ONCLICKSEVA'S TOTAL LIABILITY TO YOU IN CONNECTION WITH THE SERVICES FOR ALL DAMAGES, LOSSES, AND CAUSES OF ACTION EXCEED THE TOTAL AMOUNT PAID BY YOU FOR THE SPECIFIC SERVICE GIVING RISE TO THE CLAIM.</p>
+
+                        <h4>5. Indemnification</h4>
+                        <p>You agree to indemnify and hold OnClickSeva and its affiliates, officers, directors, employees, and agents harmless from any and all claims, demands, losses, liabilities, and expenses (including attorneys' fees) arising out of or in connection with: (i) your use of the Service; (ii) your breach or violation of any of these Terms; (iii) your violation of the rights of any third party, including Professionals.</p>
+
+                        <h4>6. Dispute Resolution by Arbitration</h4>
+                        <p>You agree that any dispute, claim or controversy arising out of or relating to these Terms or the breach, termination, enforcement, interpretation or validity thereof or the use of the Services will be settled by binding arbitration between you and OnClickSeva, except that each party retains the right to seek injunctive or other equitable relief in a court of competent jurisdiction. The arbitration will be administered in Patna, Bihar, in accordance with the Arbitration and Conciliation Act, 1996.</p>
+
+                        <h4>7. Governing Law</h4>
+                        <p>These Terms shall be governed by and construed in accordance with the laws of India. Any legal action or proceeding related to this Service shall be brought exclusively in the courts of competent jurisdiction in Patna, Bihar.</p>
+                    </div>
+                </div>
+
+                <div id="terms-content-hi" class="terms-language-content">
+                    <div class="privacy-policy-content">
+                        <h1>नियम और शर्तें</h1>
+                        <p><strong>प्रभावी तिथि: 15 अक्टूबर, 2025</strong></p>
+                        <p>कृपया इन नियमों और शर्तों ("शर्तें") को ध्यान से पढ़ें। OnClickSeva प्लेटफॉर्म ("सेवा") का उपयोग करके, आप इन शर्तों और हमारी गोपनीयता नीति से बाध्य होने के लिए सहमत हैं।</p>
+                        
+                        <h4>1. OnClickSeva प्लेटफॉर्म</h4>
+                        <p>OnClickSeva एक प्रौद्योगिकी मंच है जो उपयोगकर्ताओं ("आप") को स्वतंत्र तृतीय-पक्ष सेवा प्रदाताओं ("पेशेवरों") से जोड़ता है। आप स्वीकार करते हैं कि OnClickSeva घरेलू सेवाएं प्रदान नहीं करता है। हमारी सेवा आपको पेशेवरों से जोड़ने की सुविधा प्रदान करना है। हम किसी भी पेशेवर के नियोक्ता नहीं हैं।</p>
+
+                        <h4>2. उपयोगकर्ता के दायित्व और निषिद्ध आचरण</h4>
+                        <p>एक उपयोगकर्ता के रूप में, आप सहमत हैं:</p>
+                        <ul>
+                            <li>पंजीकरण और बुकिंग के दौरान सटीक और पूरी जानकारी प्रदान करना।</li>
+                            <li>पेशेवरों के साथ सम्मान और शिष्टाचार से व्यवहार करना।</li>
+                            <li>पेशेवरों के लिए अपना काम करने के लिए एक सुरक्षित और उपयुक्त वातावरण सुनिश्चित करना।</li>
+                            <li>सेवा का उपयोग किसी भी गैरकानूनी उद्देश्य के लिए नहीं करना, जिसमें अवैध गतिविधियों, उत्पीड़न या धोखाधड़ी के उद्देश्यों के लिए सेवाओं का अनुरोध करना शामिल है।</li>
+                        </ul>
+                        
+                        <h4>3. पृष्ठभूमि जांच और vetting अस्वीकरण</h4>
+                        <p>OnClickSeva पेशेवरों की पृष्ठभूमि की जांच कर सकता है, जिसमें पहचान सत्यापन और आपराधिक रिकॉर्ड की जांच शामिल हो सकती है। हालांकि, हम ऐसी जांचों की सटीकता, पूर्णता या समयबद्धता की गारंटी नहीं देते हैं। आप सहमत हैं कि OnClickSeva किसी भी पेशेवर के कार्यों, कदाचार या आपराधिक कृत्यों के लिए उत्तरदायी नहीं है।</p>
+
+                        <h4>4. दायित्व की सीमा</h4>
+                        <p>लागू कानून द्वारा अनुमत पूर्ण सीमा तक, OnClickSeva अप्रत्यक्ष, आकस्मिक, विशेष, अनुकरणीय, दंडात्मक, या परिणामी क्षतियों के लिए उत्तरदायी नहीं होगा, जिसमें लाभ की हानि, डेटा की हानि, व्यक्तिगत चोट, या सेवाओं के किसी भी उपयोग से संबंधित संपत्ति की क्षति शामिल है।</p>
+                        <p>OnClickSeva किसी भी क्षति, दायित्व, या हानि के लिए उत्तरदायी नहीं होगा जो निम्न से उत्पन्न हो:</p>
+                        <ul>
+                           <li>सेवाओं पर आपका उपयोग या निर्भरता या सेवाओं तक पहुंचने या उपयोग करने में आपकी असमर्थता।</li>
+                           <li>आपके और किसी भी पेशेवर के बीच कोई भी लेनदेन या संबंध, भले ही हमें ऐसी क्षतियों की संभावना के बारे में सलाह दी गई हो।</li>
+                           <li>किसी भी पेशेवर का आचरण, कार्य, या निष्क्रियता। इसमें चोरी, हमला, या कोई अन्य आपराधिक कृत्य शामिल है, लेकिन यह इन्हीं तक सीमित नहीं है।</li>
+                        </ul>
+                        <p>किसी भी स्थिति में, सभी क्षतियों, हानियों और कार्रवाई के कारणों के लिए सेवाओं के संबंध में OnClickSeva का आपके प्रति कुल दायित्व उस विशिष्ट सेवा के लिए आपके द्वारा भुगतान की गई कुल राशि से अधिक नहीं होगा जिससे दावा उत्पन्न हुआ है।</p>
+
+                        <h4>5. क्षतिपूर्ति</h4>
+                        <p>आप OnClickSeva और उसके सहयोगियों, अधिकारियों, निदेशकों, कर्मचारियों और एजेंटों को किसी भी और सभी दावों, मांगों, हानियों, देनदारियों और खर्चों (वकीलों की फीस सहित) से क्षतिपूर्ति करने और हानिरहित रखने के लिए सहमत हैं, जो निम्न से उत्पन्न होते हैं: (i) आपका सेवा का उपयोग; (ii) इन शर्तों में से किसी का आपका उल्लंघन; (iii) किसी भी तीसरे पक्ष, जिसमें पेशेवर शामिल हैं, के अधिकारों का आपका उल्लंघन।</p>
+
+                        <h4>6. मध्यस्थता द्वारा विवाद समाधान</h4>
+                        <p>आप सहमत हैं कि इन शर्तों से उत्पन्न होने वाले किसी भी विवाद, दावे या विवाद को आपके और OnClickSeva के बीच बाध्यकारी मध्यस्थता द्वारा सुलझाया जाएगा। मध्यस्थता पटना, बिहार में, मध्यस्थता और सुलह अधिनियम, 1996 के अनुसार प्रशासित की जाएगी।</p>
+
+                        <h4>7. शासी कानून</h4>
+                        <p>इन शर्तों को भारत के कानूनों के अनुसार नियंत्रित और समझा जाएगा। इस सेवा से संबंधित कोई भी कानूनी कार्रवाई या कार्यवाही विशेष रूप से पटना, बिहार में सक्षम क्षेत्राधिकार की अदालतों में लाई जाएगी।</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div id="faq-modal" class="modal hidden about-us-view">
+    <div class="about-us-content">
+        <header class="about-us-header">
+            <nav>
+                <div class="logo">
+                    <img src="https://raw.githubusercontent.com/sankumardeep/pesonal-pic/main/onclick%20logo.jpg" alt="OnClickSeva Logo" class="brand-logo">
+                    <a href="#home">OnClickSeva</a>
+                </div>
+                <div class="header-options">
+                    <div class="option-item profile hidden" id="faq-profile-icon-wrapper">
+                        <div class="option-item profile" id="faq-profile-icon">
+                            <div class="profile-avatar" id="faq-profile-avatar">
+                                <span id="faq-profile-initial"></span>
+                            </div>
+                        </div>
+                        <div class="profile-dropdown hidden" id="faq-profile-dropdown">
+                            <a href="#" class="about-nav-link" data-target-hash="#/my-bookings">My Bookings</a>
+                            <a href="#" class="about-nav-link" data-target-hash="#/help">Help</a>
+                            <a href="#" id="faq-header-logout-btn">Logout</a>
+                        </div>
+                    </div>
+                    <div id="faq-guest-header">
+                        <a href="#" id="faq-header-login-btn" class="about-header-login-btn">Login / Sign up</a>
+                    </div>
+                </div>
+            </nav>
+        </header>
+        
+     
+        <div class="about-main-content">
+            <div class="about-container">
+                <div class="privacy-policy-content">
+                    <h1>Frequently Asked Questions</h1>
+                    <p>Find answers to common questions about our services, bookings, and payments.</p>
+
+                  <div class="faq-accordion">
+    <div class="faq-item">
+        <button class="faq-question">
+            <span>How do I book a service?</span>
+            <i class="fas fa-chevron-down"></i>
+        </button>
+        <div class="faq-answer">
+            <p>You can book a service by navigating to the desired category, selecting the service you need, clicking "Book now," choosing your preferred time slot, and confirming your booking at checkout.</p>
+        </div>
+    </div>
+    
+    <div class="faq-item">
+        <button class="faq-question">
+            <span>How do I pay for the service?</span>
+            <i class="fas fa-chevron-down"></i>
+        </button>
+        <div class="faq-answer">
+            <p>Currently, we offer <strong>Cash on Delivery (COD)</strong>. You can pay the professional directly in cash after the service is completed to your satisfaction. We are actively working on integrating online payment options soon!</p>
+        </div>
+    </div>
+
+    <div class="faq-item">
+        <button class="faq-question">
+            <span>Are there any hidden charges?</span>
+            <i class="fas fa-chevron-down"></i>
+        </button>
+        <div class="faq-answer">
+            <p>No, OnClickSeva believes in <strong>100% transparent pricing</strong>. The amount shown to you at the time of checkout, including all taxes and charges, is the final amount you have to pay. There are no hidden costs.</p>
+        </div>
+    </div>
+    <div class="faq-item">
+        <button class="faq-question">
+            <span>Are the professionals verified?</span>
+            <i class="fas fa-chevron-down"></i>
+        </button>
+        <div class="faq-answer">
+            <p>Yes, absolutely. All professionals on the OnClickSeva platform undergo a rigorous verification process, including background checks and skill assessments, to ensure you receive safe and high-quality service.</p>
+        </div>
+    </div>
+    <div class="faq-item">
+        <button class="faq-question">
+            <span>What if I am not happy with the service?</span>
+            <i class="fas fa-chevron-down"></i>
+        </button>
+        <div class="faq-answer">
+            <p>Your satisfaction is our priority. If you are not satisfied, you can rate the professional and provide feedback through the "My Bookings" section. Our support team will review the issue and may provide a re-work or refund depending on the case.</p>
+        </div>
+    </div>
+     <div class="faq-item">
+        <button class="faq-question">
+            <span>How do I cancel or reschedule a booking?</span>
+            <i class="fas fa-chevron-down"></i>
+        </button>
+        <div class="faq-answer">
+            <p>You can cancel or reschedule from the "My Bookings" section. Cancellations are free if done more than 12 hours before the service or if a professional has not yet been assigned. A fee may be applicable otherwise.</p>
+        </div>
+    </div>
+</div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div id="customer-support-modal" class="modal hidden about-us-view">
+    <div class="about-us-content">
+        <header class="about-us-header">
+            <nav>
+                <div class="logo">
+                    <img src="https://raw.githubusercontent.com/sankumardeep/pesonal-pic/main/onclick%20logo.jpg" alt="OnClickSeva Logo" class="brand-logo">
+                    <a href="#home">OnClickSeva</a>
+                </div>
+                <div class="header-options">
+                    <div class="option-item profile hidden" id="support-profile-icon-wrapper">
+                        <div class="option-item profile" id="support-profile-icon">
+                            <div class="profile-avatar" id="support-profile-avatar">
+                                <span id="support-profile-initial"></span>
+                            </div>
+                        </div>
+                        <div class="profile-dropdown hidden" id="support-profile-dropdown">
+                            <a href="#" class="about-nav-link" data-target-hash="#/my-bookings">My Bookings</a>
+                            <a href="#" class="about-nav-link" data-target-hash="#/help">Help</a>
+                            <a href="#" id="support-header-logout-btn">Logout</a>
+                        </div>
+                    </div>
+                    <div id="support-guest-header">
+                        <a href="#" id="support-header-login-btn" class="about-header-login-btn">Login / Sign up</a>
+                    </div>
+                </div>
+            </nav>
+        </header>
+     
+
+        <div class="about-main-content">
+            <div class="about-container">
+                <div class="privacy-policy-content">
+                    <h1>Customer Support</h1>
+                    <p>We're here to help you. Reach out to us through any of the channels below.</p>
+
+                    <h4><i class="fas fa-envelope"></i> Contact Us via Email</h4>
+                    <p>For any queries, complaints, or feedback, please email us. Our team will get back to you within 24 hours.</p>
+                    <p><strong>Email:</strong> <a href="mailto:support@onclickseva.com">support@onclickseva.com</a></p>
+
+                    <h4><i class="fas fa-life-ring"></i> Self-Help Resources</h4>
+                    <p>Many common questions are already answered in our resources. Check them out for instant solutions:</p>
+                    <ul>
+                        <li><a href="#/faq">Frequently Asked Questions (FAQs)</a> - For general questions about our services.</li>
+                        <li><a href="#/help">Help Center</a> - For detailed guides on bookings, payments, and your account.</li>
+                    </ul>
+
+                    <h4><i class="fas fa-clock"></i> Business Hours</h4>
+                    <p>Our customer support team is available from <strong>10:00 AM to 7:00 PM</strong>, Monday to Saturday.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div id="how-it-works-modal" class="modal hidden about-us-view">
+    <div class="about-us-content">
+        <header class="about-us-header">
+            <nav>
+                <div class="logo">
+                    <img src="https://raw.githubusercontent.com/sankumardeep/pesonal-pic/main/onclick%20logo.jpg" alt="OnClickSeva Logo" class="brand-logo">
+                    <a href="#home">OnClickSeva</a>
+                </div>
+                <div class="header-options">
+                    <div class="option-item profile hidden" id="how-it-works-profile-icon-wrapper">
+                        <div class="option-item profile" id="how-it-works-profile-icon">
+                            <div class="profile-avatar" id="how-it-works-profile-avatar">
+                                <span id="how-it-works-profile-initial"></span>
+                            </div>
+                        </div>
+                        <div class="profile-dropdown hidden" id="how-it-works-profile-dropdown">
+                             <a href="#" class="about-nav-link" data-target-hash="#/my-bookings">My Bookings</a>
+                            <a href="#" class="about-nav-link" data-target-hash="#/help">Help</a>
+                            <a href="#" id="how-it-works-header-logout-btn">Logout</a>
+                        </div>
+                    </div>
+                    <div id="how-it-works-guest-header">
+                        <a href="#" id="how-it-works-header-login-btn" class="about-header-login-btn">Login / Sign up</a>
+                    </div>
+                </div>
+            </nav>
+        </header>
+        
+        
+
+        <div class="about-main-content">
+            <div class="about-container">
+                <div class="privacy-policy-content">
+                    <h1>How It Works</h1>
+                    <p>Get reliable home services in just a few simple steps.</p>
+
+                    <div class="how-it-works-steps">
+                        <div class="step-item">
+                            <div class="step-icon"><i class="fas fa-search"></i></div>
+                            <h4>1. Select a Service</h4>
+                            <p>Browse through our categories or use the search bar to find the service you need.</p>
+                        </div>
+                        <div class="step-item">
+                            <div class="step-icon"><i class="fas fa-cart-plus"></i></div>
+                            <h4>2. Customize & Book</h4>
+                            <p>Add services to your cart, choose any add-ons you need, and view transparent pricing.</p>
+                        </div>
+                        <div class="step-item">
+                            <div class="step-icon"><i class="fas fa-calendar-alt"></i></div>
+                            <h4>3. Schedule a Time</h4>
+                            <p>Pick a date and time that is convenient for you, or choose our 'On-Demand' option for faster service.</p>
+                        </div>
+                        <div class="step-item">
+                            <div class="step-icon"><i class="fas fa-check-circle"></i></div>
+                            <h4>4. Confirm & Relax</h4>
+                            <p>Confirm your booking and relax! A verified professional will be assigned and will arrive at your scheduled time.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div id="careers-modal" class="modal hidden about-us-view">
+    <div class="about-us-content">
+        <header class="about-us-header">
+            <nav>
+                <div class="logo">
+                    <img src="https://raw.githubusercontent.com/sankumardeep/pesonal-pic/main/onclick%20logo.jpg" alt="OnClickSeva Logo" class="brand-logo">
+                    <a href="#home">OnClickSeva</a>
+                </div>
+                <div class="header-options">
+                    <div class="option-item profile hidden" id="careers-profile-icon-wrapper">
+                        <div class="option-item profile" id="careers-profile-icon">
+                            <div class="profile-avatar" id="careers-profile-avatar">
+                                <span id="careers-profile-initial"></span>
+                            </div>
+                        </div>
+                        <div class="profile-dropdown hidden" id="careers-profile-dropdown">
+                            <a href="#" class="about-nav-link" data-target-hash="#/my-bookings">My Bookings</a>
+                            <a href="#" class="about-nav-link" data-target-hash="#/help">Help</a>
+                            <a href="#" id="careers-header-logout-btn">Logout</a>
+                        </div>
+                    </div>
+                    <div id="careers-guest-header">
+                        <a href="#" id="careers-header-login-btn" class="about-header-login-btn">Login / Sign up</a>
+                    </div>
+                </div>
+            </nav>
+        </header>
+        
+       
+
+        <div class="about-main-content">
+            <div class="about-container">
+                <div class="privacy-policy-content">
+                    <div class="careers-intro">
+                        <h1>Join Our Mission</h1>
+                        <p>We're building the future of home services in Bihar. If you're passionate, driven, and want to make a real impact, we want to hear from you.</p>
+                    </div>
+
+                    <h4>Current Openings</h4>
+                    <p>We are always looking for talented individuals. Even if you don't see a perfect fit below, feel free to send your resume to <a href="mailto:careers@onclickseva.com">careers@onclickseva.com</a>.</p>
+
+                    <div class="job-listings-container">
+                        <div class="job-listing">
+                            <div>
+                                <div class="job-title">Operations Manager</div>
+                                <div class="job-location">Patna, Bihar</div>
+                            </div>
+                            <a href="mailto:careers@onclickseva.com?subject=Application for Operations Manager" class="apply-btn">Apply</a>
+                        </div>
+                        <div class="job-listing">
+                            <div>
+                                <div class="job-title">Full-Stack Software Engineer</div>
+                                <div class="job-location">Remote / Patna</div>
+                            </div>
+                            <a href="mailto:careers@onclickseva.com?subject=Application for Software Engineer" class="apply-btn">Apply</a>
+                        </div>
+                         <div class="job-listing">
+                            <div>
+                                <div class="job-title">Digital Marketing Specialist</div>
+                                <div class="job-location">Patna, Bihar</div>
+                            </div>
+                            <a href="mailto:careers@onclickseva.com?subject=Application for Digital Marketing Specialist" class="apply-btn">Apply</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div id="rewards-modal" class="modal hidden about-us-view">
+    <div class="about-us-content">
+        <header class="about-us-header">
+            <nav>
+                <div class="logo">
+                    <img src="https://raw.githubusercontent.com/sankumardeep/pesonal-pic/main/onclick%20logo.jpg" alt="OnClickSeva Logo" class="brand-logo">
+                    <a href="#home">OnClickSeva</a>
+                </div>
+                <div class="header-options">
+                    <div class="option-item profile hidden" id="rewards-profile-icon-wrapper">
+                        <div class="option-item profile">
+                            <div class="profile-avatar"><span id="rewards-profile-initial"></span></div>
+                        </div>
+                    </div>
+                    <div id="rewards-guest-header">
+                        <a href="#" id="rewards-header-login-btn" class="about-header-login-btn">Login / Sign up</a>
+                    </div>
+                </div>
+            </nav>
+        </header>
+        
+        
+
+        <div class="about-main-content">
+            <div class="rewards-container">
+                <section class="rewards-hero">
+                    <img src="https://res.cloudinary.com/debszd7si/image/upload/v1760973830/Gemini_Generated_Image_kqxdyukqxdyukqxd_aytgsh.png" alt="Gift Icon" class="gift-icon-placeholder"> <h1>Refer and get FREE services</h1>
+                    <p>Invite your friends to try OnClickSeva. They get instant ₹100 off. You win ₹100 once they take a service.</p>
+                </section>
+
+                <section class="refer-via-container">
+                    <h3>Refer via</h3>
+                    <div class="refer-buttons">
+                        <button class="refer-btn whatsapp" data-action="refer-whatsapp">
+                            <i class="fab fa-whatsapp"></i>
+                            <span>Whatsapp</span>
+                        </button>
+                        <button class="refer-btn messenger" data-action="refer-messenger">
+                            <i class="fab fa-facebook-messenger"></i>
+                            <span>Messenger</span>
+                        </button>
+                        <button class="refer-btn copy" data-action="copy-referral-link">
+                            <i class="fas fa-copy"></i>
+                            <span>Copy Link</span>
+                        </button>
+                    </div>
+                </section>
+
+                <section class="how-it-works-container">
+                    <h3>How it works?</h3>
+                    <div class="how-it-works-steps">
+                        <div class="step">
+                            <div class="step-number">1</div>
+                            <p>Invite your friends & get rewarded</p>
+                        </div>
+                        <div class="step">
+                            <div class="step-number">2</div>
+                            <p>They get ₹100 on their first service</p>
+                        </div>
+                        <div class="step">
+                            <div class="step-number">3</div>
+                            <p>You get ₹100 once their service is completed</p>
+                        </div>
+                    </div>
+                </section>
+
+                <section class="rewards-links">
+                    <a href="#" data-action="open-terms">Terms and conditions</a>
+                    <span>•</span>
+                    <a href="#" data-action="open-faq">FAQs</a>
+                </section>
+
+                <section class="rewards-status-section">
+                    <h3>You are yet to earn any scratch cards</h3>
+                    <p>Start referring to get surprises</p>
+                    <div class="earnings-highlight">
+                        <i class="fas fa-gift"></i>
+                        <span>Earn ₹100 on every successful referral</span>
+                    </div>
+                </section>
+            </div>
+        </div>
+    </div>
+</div>
+<div id="toast-notification" class="toast-message"></div>
+
+<div id="account-modal" class="modal hidden about-us-view">
+    <div class="about-us-content">
+        <header class="about-us-header">
+            <nav>
+                <div class="logo">
+                    <img src="https://raw.githubusercontent.com/sankumardeep/pesonal-pic/main/onclick%20logo.jpg" alt="OnClickSeva Logo" class="brand-logo">
+                    <a href="#home">OnClickSeva</a>
+                </div>
+           
+            </nav>
+        </header>
+
+        <div class="about-main-content">
+            <div class="account-container">
+                <section class="account-header">
+                    <div>
+                        <h2 data-bind="account-name">Guest User</h2>
+                        <p data-bind="account-phone">+91 9123493806</p>
+                    </div>
+                    <i class="fas fa-pencil-alt"></i>
+                </section>
+
+                <section class="account-quick-links">
+                    <div class="quick-link-card" data-action="go-to-bookings">
+                        <i class="fas fa-book-open"></i>
+                        <span>My bookings</span>
+                    </div>
+                    <div class="quick-link-card">
+                        <i class="fas fa-hdd"></i>
+                        <span>Native devices</span>
+                    </div>
+                    <div class="quick-link-card" data-action="go-to-help">
+                        <i class="fas fa-headset"></i>
+                        <span>Help & support</span>
+                    </div>
+                </section>
+
+                <section class="account-options-list">
+                    <div class="account-option-item"><i class="fas fa-clipboard-list"></i><span>My Plans</span><i class="fas fa-chevron-right"></i></div>
+                    <div class="account-option-item"><i class="fas fa-wallet"></i><span>Wallet</span><i class="fas fa-chevron-right"></i></div>
+                    <div class="account-option-item"><i class="fas fa-eye"></i><span>Plus membership</span><i class="fas fa-chevron-right"></i></div>
+                    <div class="account-option-item"><i class="fas fa-star"></i><span>My rating</span><i class="fas fa-chevron-right"></i></div>
+                    <div class="account-option-item" data-action="manage-addresses"><i class="fas fa-map-marker-alt"></i><span>Manage addresses</span><i class="fas fa-chevron-right"></i></div>
+                    <div class="account-option-item"><i class="fas fa-credit-card"></i><span>Manage payment methods</span><i class="fas fa-chevron-right"></i></div>
+                    <div class="account-option-item"><i class="fas fa-cog"></i><span>Settings</span><i class="fas fa-chevron-right"></i></div>
+                    <div class="account-option-item" data-action="go-to-about"><i class="fas fa-info-circle"></i><span>About OCS</span><i class="fas fa-chevron-right"></i></div>
+                </section>
+
+                <section class="account-refer-banner" data-action="go-to-rewards">
+                    <div class="banner-text">
+                        <h3>Refer & earn ₹100</h3>
+                        <p>Get ₹100 when your friend completes their first booking</p>
+                        <button>Refer now</button>
+                    </div>
+                    <img src="https://res.cloudinary.com/debszd7si/image/upload/v1760973830/Gemini_Generated_Image_kqxdyukqxdyukqxd_aytgsh.png" alt="Gift Box">
+                </section>
+
+                <button class="account-logout-btn" data-action="logout">Logout</button>
+
+                <p class="app-version">Version 1.0.0 R1</p>
+            </div>
+        </div>
+    </div>
+</div>
+<div id="add-to-cart-toast" class="add-to-cart-toast">
+        <i class="fas fa-check-circle"></i>
+        <span id="toast-message-text">Item added to cart</span>
+    </div>
+    <script src="script.js"></script>
+    <script src="footer.js"></script>
+    <script src="design.js"></script>
+    
+<nav class="mobile-bottom-nav">
+        <a href="#home" class="mobile-nav-btn" data-action="go-home">
+            <i class="fas fa-home"></i>
+            <span>Home</span>
+        </a>
+        <a href="#/my-bookings" class="mobile-nav-btn" data-action="open-bookings">
+            <i class="fas fa-book-open"></i>
+            <span>Bookings</span>
+        </a>
+        <a href="#/cart" class="mobile-nav-btn" data-action="open-cart">
+            <i class="fas fa-shopping-cart"></i>
+            <span>Cart</span>
+            <span class="cart-badge" id="mobile-cart-count-badge">0</span>
+        </a>
+        <a href="#" class="mobile-nav-btn" data-action="open-rewards">
+            <i class="fas fa-gift"></i>
+            <span>Rewards</span>
+        </a>
+        <a href="#" class="mobile-nav-btn" data-action="open-account">
+            <i class="fas fa-user-circle"></i>
+            <span>Account</span>
+        </a>
+    </nav>
+
+    
+
+</body>
+</html>

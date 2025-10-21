@@ -1,0 +1,1500 @@
+/* mobile-nav.css */
+/* This file contains all styles for the bottom navigation bar on mobile and tablet devices. */
+
+/* Media query to ensure these styles ONLY apply to screens 768px wide or smaller */
+@media (max-width: 768px) {
+
+    
+
+    /* --- 6. Content Padding Adjustment --- */
+    #main-app-container {
+        padding-bottom: 70px;
+    }
+
+    #booking-details-popup .booking-details-container,
+    #checkout-page .pane-scroll-content1 {
+        padding-bottom: 70px;
+    }
+
+    /* ============================================= */
+    /* ==   NEW: FULL-SCREEN MOBILE EXPERIENCE    == */
+    /* ============================================= */
+    
+    /* --- 7. Main App Header & Content --- */
+   #main-app-container > header {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    z-index: 1003;
+    background: transparent;
+    backdrop-filter: none;
+    -webkit-backdrop-filter: none;
+    padding: 0.75rem 1rem;
+    height: auto;
+    /* UPDATED: This now animates the background-image (for the gradient)
+      over 0.4 seconds for a smoother, more noticeable effect.
+    */
+    transition: background-image 0.4s ease-in-out, box-shadow 0.4s ease-in-out;
+}
+
+    /* ================================================== */
+    /* ==   >>>  MODERN SCROLLED HEADER STYLES   <<<   == */
+    /* ================================================== */
+    
+    /* UPDATED: This rule now applies a modern gradient and shadow */
+    #main-app-container > header.scrolled {
+        background-image: linear-gradient(135deg, #FF8C42 0%, #FF7722 100%);
+        backdrop-filter: none;
+        -webkit-backdrop-filter: none;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15); /* Softer, more pronounced shadow */
+    }
+
+    /* UPDATED: This rule now makes the text and icons bolder */
+    #main-app-container > header.scrolled .option-item.location,
+    #main-app-container > header.scrolled .option-item.location span,
+    #main-app-container > header.scrolled .option-item.location i,
+    #main-app-container > header.scrolled .option-item.profile,
+    #main-app-container > header.scrolled .profile-avatar {
+        color: #FFFFFF;
+        border-color: rgba(255, 255, 255, 0.5);
+        font-weight: 600; /* <-- Bolder text */
+    }
+
+    #main-app-container > header.scrolled .option-item.profile {
+        background-color: rgba(0, 0, 0, 0.1);
+    }
+    
+    /* ============================================= */
+    /* ==        >>> END OF YOUR UPDATES <<<      == */
+    /* ============================================= */
+
+    #main-app-container #main-content {
+        padding-top: 0; 
+    }
+    
+    #main-app-container #main-content > .hero-section,
+    #main-app-container #main-content > .top-content,
+    #main-app-container #main-content > *:first-child {
+        padding-top: 125px;
+    }
+
+    /* --- 8. Universal Full-Screen Styles for ALL Popups --- */
+    .modal,
+    .modal-overlay,
+    #checkout-page,
+    #booking-details-popup,
+    #help-center-section,
+    #account-page,
+    #getting-started-page,
+    #addon-selection-modal,
+    #payment-page,
+    .about-us-view {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100vw;
+        height: 100vh;
+        padding: 0;
+        border-radius: 0;
+        background-color: #f7f9fc; /* Consistent light background */
+        align-items: flex-start;
+        justify-content: flex-start;
+        z-index: 2000;
+        transform: none !important;
+        animation: none !important;
+    }
+    
+    #yourCartModal.modal-overlay {
+        display: none;
+    }
+
+    #yourCartModal.modal-overlay:not(.hidden) {
+        display: flex;
+    }
+
+    .modal-content-wrapper,
+    .location-modal-dialog,
+    .cart-modal-content1,
+    .slot-modal-content,
+    .payment-modal-content,
+    .rating-modal-content,
+    .confirmation-modal-content,
+    .addon-modal-content,
+    .deep-details-dialog,
+    .help-content-wrapper,
+    .about-us-content,
+    .cart-modal-content {
+        width: 100% !important;
+        height: 100%;
+        max-width: 100% !important;
+      
+        border-radius: 0 !important;
+        box-shadow: none !important;
+    top: auto;
+        position: relative;
+        display: flex;
+        flex-direction: column;
+    }
+    
+    /* --- 9. Specific Layouts for Individual Popups --- */
+    
+    .checkout-header, 
+    .about-us-header,
+    .deep-details-header,
+    .cart-modal-header,
+    .location-modal-header,
+    .slot-modal-header,
+    .payment-modal-header {
+        position: sticky;
+        top: 0;
+        width: 100%;
+        z-index: 10;
+        flex-shrink: 0;
+        border-radius: 0;
+        background-color: #fff;
+    }
+    
+    .pane-scroll-content, .pane-scroll-content1,
+    .booking-details-container, #booking-details-content-area,
+    #full-cart-display-container, .deep-details-content,
+    .about-main-content, .help-topics, .location-modal-body,
+    .slot-modal-body, .payment-modal-body, .addon-modal-body,
+    .modal-body {
+        flex-grow: 1;
+        overflow-y: auto;
+        height: 100%;
+       
+        padding-bottom: 70px; /* Padding for the bottom nav bar */
+    }
+
+    .details-section, .your-booking-card, .gsc-content {
+        border-radius: 16px;
+        border-left: none;
+        border-right: none;
+    }
+
+    /* --- 10. Popup-Specific Tweaks --- */
+
+  /* ▼▼▼ AND REPLACE IT WITH THIS ▼▼▼ */
+    #services-sidebar {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 75%; /* Cover 75% of the screen */
+        height: 100%;
+        z-index: 3000; /* Ensure it's on top of everything */
+        transform: translateX(-100%); /* Start off-screen to the left */
+        transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1); /* Smooth slide animation */
+        box-shadow: 5px 0 25px rgba(0,0,0,0.2);
+        display: block; /* Make sure it's not hidden */
+    }
+    .your-booking-card {
+        flex-direction: column;
+    }
+    .booking-card-image {
+        width: 100%;
+        max-width: 100%;
+        height: 250px;
+        order: -1;
+    }
+  
+
+    
+    #deep-details-image-container {
+        height: 280px;
+    }
+    
+   
+    #checkout-flow-container {
+        flex-direction: column;
+        transition: none;
+    }
+    .checkout-pane {
+        width: 100%;
+        height: 100%;
+        position: static;
+        transform: none !important;
+        box-shadow: none;
+    }
+    #checkout-details-pane {
+        display: none;
+    }
+     #checkout-flow-container.step-2 {
+        background-color: #f7f9fc;
+    }
+    #checkout-flow-container.step-2 #checkout-summary-pane {
+        display: none;
+    }
+    #checkout-flow-container.step-2 #checkout-details-pane {
+        display: flex;
+    }
+   .summary-pane-footer {
+    position: sticky;
+    bottom: 65px; /* --- CHANGE THIS --- Lifts it above the 65px mobile nav */
+    width: 100%;
+    z-index: 5;
+    background-color: #ffffff; /* --- ADD THIS --- Gives it a solid background */
+    padding: 10px 15px; /* --- ADD THIS --- Adds some internal spacing */
+    box-shadow: 0 -2px 10px rgba(0,0,0,0.08); /* --- ADD THIS --- Adds a subtle shadow */
+}
+
+    /* ================================================= */
+    /* ==   UPDATED MOBILE HEADER STYLING (YOUR REQUEST) == */
+    /* ================================================= */
+    
+    /* 11. Hide redundant desktop icons and logo */
+    #main-app-container > header .option-item.cart,
+    #main-app-container > header .logo {
+        display: none;
+    }
+
+    #main-app-container > header .option-item.profile {
+        display: flex;
+    }
+
+    #main-app-container > header .header-options {
+        display: contents;
+    }
+    
+    #main-app-container > header nav {
+        display: grid;
+        grid-template-columns: 1fr auto; /* Col 1 for location, Col 2 for profile icon */
+        grid-template-rows: auto auto;    /* Row 1 for location/profile, Row 2 for search */
+        align-items: center;
+        width: 100%;
+        gap: 12px;
+    }
+
+    #main-app-container > header .option-item.location {
+        grid-row: 1;
+        grid-column: 1;
+        width: 100%;
+        background: transparent; 
+        border: none;
+        justify-content: flex-start;
+        margin-top: 0;
+        color: #fff;
+    }
+    #main-app-container > header .option-item.location i {
+        color: #fff;
+    }
+    #main-app-container > header .option-item.location span {
+        color: #fff;
+    }
+
+    #main-app-container > header .option-item.profile {
+        grid-row: 1;
+        grid-column: 2;
+        justify-self: end;
+        color: #fff;
+        background-color: rgba(255, 255, 255, 0.2);
+        border-radius: 50%;
+        padding: 0px;
+    }
+
+    #main-app-container > header .option-item.search {
+        grid-row: 2;
+        grid-column: 1 / -1;
+        width: 100%;
+        background: rgba(255, 255, 255, 0.9);
+        border: none;
+        border-radius: 8px;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    }
+    #main-app-container > header .option-item.search input {
+        color: #333;
+    }
+    #main-app-container > header .option-item.search i {
+        color: #6a11cb;
+    }
+
+    /* ============================================= */
+    /* ==      [NEW] MODERN MOBILE HERO LAYOUT    == */
+    /* ============================================= */
+
+    /* ======================================================= */
+/* ==   [UPDATED] COMPACT & REFINED MOBILE HERO LAYOUT  == */
+/* ======================================================= */
+
+/* 1. Reset hero section to a simpler layout for mobile */
+.hero-section {
+    position: relative;
+    padding: 0 0 3rem 0; /* Reduced bottom padding */
+    min-height: auto;
+    background-image: url('https://images.unsplash.com/photo-1600585154340-be6161a56a0c?q=80&w=2070');
+    background-size: cover;
+    background-position: center center;
+    overflow: hidden;
+}
+.hero-section::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0; bottom: 0;
+    background: rgba(13, 27, 62, 0.7);
+    z-index: 1;
+    display: block;
+}
+
+/* 2. Main container moved up for a more compact feel */
+.hero-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0;
+    grid-template-columns: 1fr;
+    text-align: center;
+    padding-top: 30px; /* Reduced top padding */
+    position: relative;
+    z-index: 2;
+}
+
+/* 3. The hero image is not needed in this layout */
+.hero-image-content {
+    display: none;
+}
+
+/* 4. The main wrapper for the card content */
+.hero-text-content {
+    order: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 90%;
+    max-width: 450px;
+    position: relative;
+    z-index: 2;
+    background: transparent;
+    backdrop-filter: none;
+    -webkit-backdrop-filter: none;
+    animation: none;
+    border: none;
+    box-shadow: none;
+    padding: 0;
+    margin: 0;
+}
+
+/* 5. Smaller, more refined logo */
+.hero-text-content .hero-logo {
+    width: 100px; /* Reduced size */
+    height: 100px; /* Reduced size */
+    border-radius: 50%;
+    background-color: #ded8e3;
+    padding: 0px; /* Adjusted padding */
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+    border: 0px solid #5c0a9f;
+    object-fit: contain;
+    position: absolute;
+    top: -50px; /* Adjusted for new size */
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 3;
+}
+
+/* 6. More compact text content card */
+.hero-text-content .hero-written-content {
+    background-color: rgba(255, 255, 255, 0.05);
+    backdrop-filter: blur(0px);
+    -webkit-backdrop-filter: blur(4px);
+    border-radius: 20px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+    width: 100%;
+    text-align: center;
+    padding: 65px 1.5rem 1.5rem; /* Reduced padding */
+    z-index: 1;
+    position: relative;
+}
+
+/* 7. Refined typography and button for a professional look */
+.hero-text-content h1 {
+    font-size: 2rem; /* Reduced font size */
+    color: var(--white);
+    line-height: 1.25;
+    margin: 0 0 0.8rem 0; /* Reduced margin */
+    text-shadow: 0 2px 4px rgba(0,0,0,0.3);
+}
+
+.hero-text-content p {
+    color: var(--white);
+    font-size: 0.9rem; /* Reduced font size */
+    margin: 0 auto 1.2rem auto; /* Reduced margin */
+    max-width: 350px;
+    text-shadow: 0 1px 2px rgba(0,0,0,0.2);
+}
+
+/* NEW: Mobile-specific style for the button */
+.hero-text-content .cta-button {
+    padding: 14px 28px; /* Smaller padding */
+    font-size: 1rem; /* Smaller font */
+}
+
+/* These styles were already here and are correct */
+.services-section{
+    padding: 0px 0px;
+}
+
+    /* ======================================================= */
+/* ==   [NEW] MOST BOOKED SECTIONS (MOBILE & TABLET)    == */
+/* ======================================================= */
+
+/* --- 1. General Adjustments for a More Concise Look --- */
+.most-booked-wrapper {
+    padding: 40px 0; /* Reduced vertical padding */
+}
+
+.most-booked h2 {
+    font-size: 1.8rem; /* Smaller main title */
+    margin-bottom: 8px; /* Reduced space below title */
+}
+
+.most-booked .section-subtitle {
+    font-size: 0.95rem; /* Smaller subtitle */
+    max-width: 90%;
+    margin: 0 auto 25px auto; /* Reduced margins */
+    top: 0; /* Reset any desktop positioning */
+    position: static;
+}
+
+/* --- 2. Hide Slider Buttons on Mobile/Tablet --- */
+.most-booked .slider-btn {
+    display: none;
+}
+
+/* --- 3. Adjust the Scrolling Container & Card Dimensions --- */
+
+/* Add some padding so cards don't stick to the screen edges */
+.most-booked .slider-track {
+    padding-left: 15px;
+    padding-right: 15px;
+    gap: 15px; /* Reduced gap between cards */
+}
+
+/* Make the service cards themselves smaller and more professional */
+.most-booked .slider-track .service-card {
+    width: 260px; /* Reduced width */
+ 
+    flex-shrink: 0;
+}
+
+/* Adjust the content inside the smaller cards */
+.most-booked .service-card .service-card-image {
+    height: 240px; /* Shorter image height */
+}
+
+.most-booked .service-card .service-info {
+    padding: 15px; /* Reduced padding inside the text area */
+    top: 31px; /* Reset desktop positioning */
+}
+
+.most-booked .service-card h3 {
+    font-size: 1.15rem; /* Smaller title */
+    margin-bottom: 6px;
+}
+
+.most-booked .service-card .service-rating {
+    font-size: 0.8rem; /* Smaller rating text */
+    margin-bottom: 8px;
+}
+
+.most-booked .service-card .service-price .current-price {
+    font-size: 1.3rem; /* Smaller price text */
+}
+
+.most-booked .service-card .book-now-btn {
+    padding: 10px 20px; /* Smaller button */
+    font-size: 0.9rem;
+    margin-top: 12px;
+}
+
+/* --- 4. Specific Tweaks for Electrician Section Layout --- */
+.electrician-theme .slider-wrapper {
+    width: 100%; /* Ensure it takes full width on mobile */
+    left: 0; /* Reset any desktop positioning */
+}
+
+.electrician-info-box {
+    padding: 0 15px; /* Add some padding to the text box */
+}
+
+.electrician-info-box h2 {
+    top: 0; /* Reset desktop positioning */
+    font-size: 1.6rem; /* Smaller title */
+}
+.electrician-info-box .section-subtitle {
+    top: 0; /* Reset desktop positioning */
+}
+.most-booked-wrapper .services-section.most-booked{
+    padding: 0px 0px;
+}
+.slider-container{
+    position: relative;
+    top:-27px;
+}
+
+.services-section{
+    margin-bottom: 12px;
+}
+#service-deep-details-modal{
+    top:0px;
+}
+.add-to-cart-header-btn{
+    margin-right: 0px;
+}
+
+}
+
+/* ================================================= */
+/* ==   [NEW] COMPACT MOBILE SERVICE CARD STYLES  == */
+/* ================================================= */
+
+/* 1. Reduce the gap between the horizontally scrolling cards */
+#services .services-container {
+    gap: 15px; /* Reduced from 40px */
+    padding-left: 15px; /* Add some padding so the first card isn't stuck to the edge */
+    padding-right: 15px;
+}
+
+/* 2. Make the main card smaller and more compact */
+#services .services-container > .general-service-card {
+    width: 280px; /* Reduced from 340px */
+    height: 420px; /* Reduced from 500px */
+}
+
+/* 3. Adjust the image height to fit the new card size */
+.gsc-image {
+    height: 45%; /* Adjusted from 50% */
+}
+
+/* 4. Reduce padding and font sizes inside the card */
+.gsc-content {
+    padding: 20px; /* Reduced from 25px */
+}
+
+.gsc-title {
+    font-size: 1.6rem; /* Reduced from 2rem */
+}
+
+.gsc-highlights {
+    font-size: 0.85rem; /* Slightly smaller text for the bullet points */
+    margin-left: 0; /* Remove old positioning */
+    left: 0;
+    position: static;
+}
+
+/* 5. Make the button smaller and center it properly */
+.gsc-button {
+    padding: 10px 20px; /* Smaller button padding */
+    font-size: 0.9rem;
+    align-self: center; /* Proper centering */
+    /* Reset old absolute positioning helpers */
+    left: 0;
+    top: 0;
+    position: relative;
+}
+
+/* mobile-nav.css */
+
+/* ======================================================= */
+/* ==   [NEW] IMMERSIVE SERVICE DETAILS POPUP (MOBILE)  == */
+/* ======================================================= */
+
+@media (max-width: 768px) {
+
+    /* --- 1. Initial State (Not Scrolled) --- */
+    
+    /* Hide the original header, which will now act as our sticky header */
+    #service-deep-details-modal .deep-details-header {
+        display: none;
+    }
+
+    /* Style the new floating buttons that sit on top of the image */
+    .floating-header-controls {
+        position: absolute;
+        top: 15px;
+        left: 15px;
+        right: 15px;
+        z-index: 5;
+        display: flex;
+        justify-content: space-between;
+        pointer-events: none; /* Allows clicks to go "through" the container */
+    }
+
+    .floating-btn {
+        pointer-events: all; /* Makes the buttons themselves clickable */
+        background-color: rgba(0, 0, 0, 0.4);
+        border: none;
+        color: white;
+        width: 40px;
+        height: 40px;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 1rem;
+        cursor: pointer;
+        backdrop-filter: blur(5px);
+        -webkit-backdrop-filter: blur(5px);
+        transition: background-color 0.2s;
+    }
+    .floating-btn:hover {
+        background-color: rgba(0, 0, 0, 0.6);
+    }
+    /* Position the back button to the left (replacing the old 'X') */
+    #floating-back-btn {
+        /* No specific positioning needed, flexbox handles it */
+    }
+
+
+    /* --- 2. Content Repositioning --- */
+
+    /* Move the service name and add-to-cart button above the price */
+   /* mobile-nav.css */
+
+/* --- 2. Content Repositioning --- */
+
+/* Make the summary section a flex container to reorder its children */
+.details-summary-section {
+    display: flex;
+    flex-direction: column;
+}
+
+/* Style the new dynamic title that we created with JS */
+.details-summary-section .dynamic-service-title {
+    order: 1; /* Make the title appear first */
+    font-size: 2rem;
+    font-weight: 700;
+    color: #1a2533;
+    margin-bottom: 15px;
+}
+
+.summary-price-line {
+    order: 2; /* Price appears second */
+}
+
+.summary-rating-line {
+    order: 3; /* Rating appears third */
+}
+
+/* Style the main "Add to cart" button or quantity picker that now appears in the content */
+.details-summary-section .add-to-cart-btn,
+.details-summary-section .quantity-picker-wrapper {
+    order: 4; /* Button or picker appears fourth, at the bottom */
+    width: 100%;
+    margin-top: 20px;
+}
+.details-summary-section .add-to-cart-btn {
+    background-color: #6a11cb;
+    color: white;
+    padding: 15px;
+    font-size: 1rem;
+    font-weight: 600;
+    border-radius: 8px;
+    border: none;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+.details-summary-section .add-to-cart-btn:hover {
+    background-color: #530ca7;
+}
+ .details-summary-section .quantity-picker {
+    height: 50px; /* Make the picker larger to match the button size */
+    width: 60%;
+}
+
+    /* --- 3. Scrolling Sticky Header --- */
+    
+    /* This class will be added by JS on scroll */
+    #service-deep-details-modal .deep-details-header.sticky-header-visible {
+        display: flex; /* Makes the header visible */
+        position: sticky;
+        top: -92px;
+        background-color: #fff;
+        box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        z-index: 10;
+        padding: 10px 15px;
+        height: auto;
+        animation: fadeInDown 0.3s ease-out;
+    }
+
+    @keyframes fadeInDown {
+        from { opacity: 0; transform: translateY(-10px); }
+        to { opacity: 1; transform: translateY(0); }
+    }
+
+    /* Add a back arrow to the sticky header */
+    .deep-details-header.sticky-header-visible::before {
+        font-family: "Font Awesome 5 Free";
+        font-weight: 900;
+        content: "\f060"; /* Font Awesome back arrow icon */
+        font-size: 1.2rem;
+        color: #333;
+        cursor: pointer;
+        padding: 5px;
+    }
+
+    /* Style the title inside the sticky header */
+    .deep-details-header.sticky-header-visible h3 {
+        font-size: 1rem; /* Smaller font size */
+        font-weight: 600;
+        margin: 0;
+        padding-left: 15px;
+        /* Truncate long titles */
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }
+    
+    /* Make the button in the sticky header smaller */
+    .deep-details-header.sticky-header-visible .add-to-cart-header-btn {
+        padding: 8px 16px;
+        font-size: 0.8rem;
+    }
+    .deep-details-header.sticky-header-visible .quantity-picker {
+        position: relative;
+        right:-37px;
+        height: 34px;
+    }
+    .deep-details-header.sticky-header-visible .quantity-picker button {
+        width: 30px;
+    }
+
+    #deep-details-image {
+        border-radius: 16px;
+    }
+.cart-modal-content{
+    top:0px;
+}
+.cart-modal-content{
+  top:0px;
+}
+    #checkout-summary-pane{
+        width: 100%;
+    }
+
+}
+
+/* --- [FIX] Override for Add-on Popup on Mobile --- */
+@media (max-width: 768px) {
+    #addon-selection-modal {
+        /* This centers the popup window vertically and horizontally */
+        justify-content: center;
+        align-items: center;
+
+        /* This adds the semi-transparent background so you can see the page behind it */
+        background-color: rgba(0, 0, 0, 0.6); 
+    }
+
+    #addon-selection-modal .addon-modal-content {
+        /* This stops the inner content from stretching to full screen */
+        width: 90% !important; /* Use a percentage for responsiveness */
+        height: auto !important; /* Let height be determined by content */
+        max-height: 82vh; /* Prevent it from being too tall on long screens */
+
+        /* Restore the card-like appearance */
+        border-radius: 16px !important;
+        box-shadow: 0 10px 40px rgba(0,0,0,0.25) !important;
+        position: relative;
+        top:-5%;
+    }
+    /* ============================================= */
+/* ==   [FIX] MOBILE CHECKOUT ITEM OVERFLOW   == */
+/* ============================================= */
+
+.checkout-item-header {
+    /* Align items to the top instead of stretching */
+    align-items: flex-start;
+}
+
+.checkout-item-name-price {
+    /* Allow this container to grow and shrink */
+    flex-grow: 1; 
+    /* A flexbox trick to allow shrinking below its content size */
+    min-width: 0; 
+}
+
+.checkout-item-name-price .name {
+    /* This is the key fix: Force long text to wrap */
+    word-break: break-word; 
+}
+
+.checkout-item-controls {
+    /* Prevent the button container from shrinking */
+    flex-shrink: 0; 
+}
+
+
+    .addon-modal-footer{
+        position: relative;
+        top:-2%;
+    }
+    .checkout-summary {
+        padding: 0px;
+    }
+        .pane-scroll-content1{
+            width:100%;
+        }
+        .payment-modal-footer{
+            position: relative;
+            top:-20%;
+        }
+        #booking-confirmation-modal{
+            top:0px;
+        }
+
+        
+}
+/* ======================================================== */
+/* ==  [FIX] MOBILE BOOKING CONFIRMATION POPUP LAYOUT  == */
+/* ======================================================== */
+
+@media (max-width: 768px) {
+
+    /* 1. Make the modal a top-level, full-screen overlay */
+    #booking-confirmation-modal {
+        z-index: 3000 !important; /* Higher than mobile nav's z-index (2500) */
+        top: 0;
+        padding: 0;
+        height: 100vh;
+    }
+
+    /* 2. Apply a flexbox layout to the main content card */
+    #booking-confirmation-modal .confirmation-modal-content {
+        display: flex;
+        flex-direction: column; /* Stack header, body, footer vertically */
+        height: 100%;           /* Make the card fill the entire screen */
+        width: 100%;
+        border-radius: 0;
+        padding: 0;
+        top: 0;
+    }
+
+    /* 3. Style the FIXED HEADER (Blue Part) */
+    #booking-confirmation-modal .modal-header {
+        flex-shrink: 0;
+        padding: 20px 20px 15px 20px;
+        border-radius: 0;
+    }
+    #booking-confirmation-modal .confirmation-icon-container {
+        margin: 0 0 10px 0;
+    }
+    #booking-confirmation-modal .modal-header h2 {
+        font-size: 1.8rem;
+        position: static;
+        animation: none;
+        opacity: 1; /* --- THIS IS THE FIX --- */
+    }
+
+    /* 4. Style the SCROLLABLE BODY (Middle Part) */
+    #booking-confirmation-modal .modal-body {
+        flex-grow: 1;
+        overflow-y: auto;
+        padding: 20px;
+        text-align: center;
+    }
+    
+    #booking-confirmation-modal .modal-body p,
+    #booking-confirmation-modal .order-summary-box {
+        position: static;
+        top: auto;
+        animation: none;
+    }
+    
+    /* Rule for the missing paragraph text */
+    #booking-confirmation-modal .modal-body p:first-of-type {
+        opacity: 1; /* --- THIS IS THE OTHER PART OF THE FIX --- */
+    }
+
+    /* 5. Style the FIXED FOOTER (Bottom Buttons) */
+    #booking-confirmation-modal .modal-footer {
+        flex-shrink: 0;
+        padding: 15px;
+        background-color: #ffffff;
+        border-top: 1px solid #e0e0e0;
+    }
+    
+    #booking-confirmation-modal .confirmation-buttons {
+        position: static;
+        bottom: auto;
+        opacity: 1;
+        animation: none;
+    }
+    .payment-summary-section{
+        padding: 5px;
+        width:110%;
+        left:-5%;
+        position: relative;
+    }
+
+    #services-sidebar.active {
+        transform: translateX(0); /* Slide it into view */
+    }
+
+    /* --- Styles for the new hamburger menu button --- */
+    .mobile-sidebar-toggle-btn {
+        display: flex; /* Will only be 'flex' on mobile due to media query */
+        align-items: center;
+        justify-content: center;
+        position: absolute;
+        top: 18px;
+        left: 20px;
+        z-index: 15;
+        background-color: rgba(255, 255, 255, 0.85);
+        border: 1px solid #e0e0e0;
+        border-radius: 50%;
+        width: 40px;
+        height: 40px;
+        font-size: 1.1rem;
+        color: #333;
+        cursor: pointer;
+        backdrop-filter: blur(4px);
+        -webkit-backdrop-filter: blur(4px);
+    }
+
+    /* --- Dark Overlay Control --- */
+    /* This makes the overlay dark and ensures it appears above the modal content but below the sidebar */
+    #overlay.active {
+        background-color: rgba(0, 0, 0, 0.5);
+        backdrop-filter: none;
+        z-index: 2999;
+    }
+
+    
+
+    
+}
+
+
+/* mobile-nav.css */
+
+@media (max-width: 768px) {
+
+    /* ... other styles ... */
+
+    #services-sidebar {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 75%;
+        height: 100%;
+        z-index: 3000; /* ✅ HIGHEST: Ensures sidebar is on top of everything */
+        transform: translateX(-100%);
+        transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+        box-shadow: 5px 0 25px rgba(0,0,0,0.2);
+        display: block;
+        background-color: #fff; /* Add a solid background color */
+        overflow-y: auto; /* Allow sidebar to scroll if content is long */
+    }
+
+    #services-sidebar.active {
+        transform: translateX(0);
+    }
+    
+    /* ... other styles ... */
+
+    /* --- Dark Overlay Control --- */
+    #overlay.active {
+        background-color: rgba(0, 0, 0, 0.5);
+        backdrop-filter: none;
+        z-index: 2999; /* ✅ MIDDLE: Below sidebar, but above the booking modal */
+    }
+
+    /* Make sure the booking modal itself is below the overlay */
+    #booking-details-modal {
+        z-index: 2000; /* ✅ LOWEST: This is the content that gets covered */
+    }
+
+
+    /* START: ADD THESE NEW STYLES for the cart button */
+.mobile-cart-toggle-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: absolute;
+    top: 18px;
+    right: 60px; /* Position it to the left of the close button */
+    z-index: 15;
+    background-color: rgba(255, 255, 255, 0.85);
+    border: 1px solid #e0e0e0;
+    border-radius: 50%;
+    width: 40px;
+    height: 40px;
+    font-size: 1.1rem;
+    color: #333;
+    cursor: pointer;
+    backdrop-filter: blur(4px);
+    -webkit-backdrop-filter: blur(4px);
+}
+
+.mobile-cart-toggle-btn .cart-badge {
+    position: absolute;
+    top: -3px;
+    right: -3px;
+    background-color: #f00;
+    color: #fff;
+    border-radius: 50%;
+    padding: 1px 5px;
+    font-size: 0.7rem;
+    font-weight: bold;
+    border: 1px solid white;
+    display: none; /* Hidden by default */
+}
+
+body .cart-sidebar {
+    position: fixed !important; /* Force position */
+    top: 0;
+    right: 0;
+    width: 75%;
+    height: 100%;
+    z-index: 3000 !important; /* Force layering */
+    background-color: #fff; /* Ensure it has a background */
+    box-shadow: -5px 0 25px rgba(0,0,0,0.2);
+    
+    display: flex !important; /* Force display mode */
+    flex-direction: column;
+    
+    visibility: hidden; /* Hide by default */
+    transform: translateX(100%); /* Start off-screen */
+    transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1), visibility 0.4s;
+}
+
+body .cart-sidebar.active {
+    visibility: visible !important; /* Force visibility */
+    transform: translateX(0); /* Slide into view */
+}
+
+    .cart-sidebar.active {
+        width: 76%;
+    }
+    .cart-sidebar.full-height-cart {
+    height: 100%;
+    top:0px;
+    }
+
+    /* style.css */
+
+/* ============================================= */
+/* ==   [FIX] MOBILE CART SIDEBAR SCROLLING   == */
+/* ============================================= */
+
+#cart-content-area {
+    flex-grow: 1; /* Make this container fill the space between the header and footer */
+    display: flex;
+    flex-direction: column;
+    overflow: hidden; /* Prevent this container itself from scrolling */
+    min-height: 0; /* A key fix for flexbox to correctly calculate heights */
+}
+
+#cart-items-container {
+    flex-grow: 1; /* Allow the item list to take all available space */
+    overflow-y: auto; /* Make ONLY the item list scrollable */
+}
+
+.cart-summary {
+    flex-shrink: 0; /* Prevent the footer/summary from shrinking */
+}
+
+/* style.css */
+
+/* ============================================= */
+/* ==   [FIX] MOBILE CART ITEM LAYOUT/OVERFLOW  == */
+/* ============================================= */
+
+.cart-item-main {
+    gap: 10px; /* Adds consistent spacing */
+}
+
+.cart-item-name {
+    flex-grow: 1;   /* Allows the name to take up available space */
+    min-width: 0;   /* CRITICAL: Allows the name container to shrink below its content size */
+    margin-right: 0; /* Use gap for spacing instead */
+}
+
+.quantity-picker.cart-quantity-picker {
+    flex-shrink: 0; /* Prevents the quantity picker from being squished */
+}
+
+#service-deep-details-modal{
+    top:-92px;
+}
+
+/* ======================================================== */
+/* ==   [NEW] FLOATING BUTTONS FOR BOOKING POPUP (MOBILE) == */
+/* ======================================================== */
+
+/* 1. Hide the old 'X' close button inside the booking modal */
+#booking-details-modal .close-button {
+    display: none;
+}
+
+/* 2. Base style for BOTH floating buttons */
+#booking-details-modal > .mobile-sidebar-toggle-btn,
+#booking-details-modal > .mobile-cart-toggle-btn {
+    /* Positioning */
+    position: absolute;
+    top: 18px;
+    z-index: 15; /* Ensures they float above the scrolling content */
+
+    /* "Beautiful" Styling */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: rgba(255, 255, 255, 0.85); /* Semi-transparent white */
+    border: 1px solid #e0e0e0;
+    border-radius: 50%;
+    width: 40px;
+    height: 40px;
+    font-size: 1.1rem;
+    color: #333;
+    cursor: pointer;
+    backdrop-filter: blur(4px); /* Modern "glass" effect */
+    -webkit-backdrop-filter: blur(4px);
+    box-shadow: 0 2px 8px rgba(0,0,0,0.15); /* Floating shadow */
+    transition: background-color 0.2s;
+}
+
+/* 3. Position the hamburger button to the left */
+#booking-details-modal > .mobile-sidebar-toggle-btn {
+    left: 20px;
+}
+
+/* 4. Position the cart button to the right */
+#booking-details-modal > .mobile-cart-toggle-btn {
+    right: 20px;
+}
+
+/* 5. Reposition the badge on the floating cart button */
+#booking-details-modal > .mobile-cart-toggle-btn .cart-badge {
+    position: absolute;
+    top: -3px;
+    right: -3px;
+    background-color: #f00;
+    color: #fff;
+    border-radius: 50%;
+    padding: 1px 5px;
+    font-size: 0.7rem;
+    font-weight: bold;
+    border: 1px solid white;
+}
+
+/* 6. CRUCIAL: Add top padding to the content area so it doesn't start underneath our new buttons */
+#booking-details-content-area {
+    padding-top: 65px;
+}
+
+.addon-header-actions .quantity-picker{
+    width:100px;
+}
+
+
+
+/* ... other styles ... */
+
+/* --- 1. The Navigation Bar Container (Spotify-Style Gradient) --- */
+.mobile-bottom-nav {
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    height: 65px;
+    z-index: 2500;
+
+    /* Base container is fully transparent */
+    background-color: transparent;
+    -webkit-backdrop-filter: none;
+    backdrop-filter: none;
+    box-shadow: none;
+}
+
+/* Advanced: Add a pseudo-element for the gradient overlay.
+   This creates the fade effect without a solid background color,
+   ensuring icons are readable against any content. */
+.mobile-bottom-nav::before {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    height: 85px; /* Taller than the nav bar for a smooth fade */
+background: linear-gradient(to top, 
+    rgba(0, 0, 0, 0.95) 0%,  /* Start with a slightly darker base */
+    rgba(0, 0, 0, 0.9) 15%,  /* Hold the dark color up to 40% of the height */
+    rgba(0, 0, 0, 0) 100%    /* Fade to fully transparent at the top */
+);
+    z-index: -1; /* Position it behind the flex items (the buttons) */
+    pointer-events: none; /* Allows clicks to pass through to content behind it */
+}
+
+
+/* --- 2. Individual Navigation Buttons --- */
+.mobile-nav-btn {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-decoration: none;
+    font-size: 0.75rem;
+    font-weight: 500;
+    padding: 5px 0;
+    position: relative;
+
+    /* UPDATED: Muted gray color for inactive icons */
+    color: #b0b0b0; /* <<< THIS IS THE UPDATED LINE */
+
+    transition: color 0.3s ease, font-weight 0.3s ease;
+}
+
+/* --- 3. Icon Styling --- */
+.mobile-nav-btn i {
+    font-size: 1.7rem;
+    margin-bottom: 5px;
+    transition: transform 0.3s ease; /* Keep a subtle transition */
+    
+    /* Removed drop-shadow for a flatter, cleaner look like Spotify */
+    filter: none;
+}
+
+/* --- 4. Active State Styling --- */
+.mobile-nav-btn.active {
+    color: #ffffff; /* Bright white for active state */
+    font-weight: 900; /* Extra bold font for the active label */
+}
+
+/* Apply a subtle scale to the active icon itself */
+.mobile-nav-btn.active i {
+    transform: scale(1.1); /* Slightly larger icon when active */
+    filter: none; /* Ensure no filter is applied on active state */
+}
+
+
+/* --- 5. Hover State for non-touch devices --- */
+@media (hover: hover) {
+    .mobile-nav-btn:hover {
+        color: #ffffff; /* Brighten on hover */
+        /* Removed the lift effect to match the flatter Spotify style */
+        transform: none; 
+    }
+}
+
+/* --- 6. Cart Badge --- */
+.mobile-nav-btn .cart-badge {
+    position: absolute;
+    top: 0px;
+    right: calc(50% - 25px); /* Adjusted for larger icon */
+    background: linear-gradient(135deg, #ff416c, #ff4b2b); /* Gradient background */
+    color: #fff;
+    border-radius: 50%;
+    padding: 3px 6px;
+    font-size: 0.7rem;
+    font-weight: bold;
+    /* Updated border to match the dark gradient background */
+    border: 2px solid #121212; 
+    box-shadow: 0 2px 5px rgba(0,0,0,0.3); /* Pop-out shadow */
+}
+
+
+    .cart-modal-content{
+        padding-bottom: 80px;
+    }
+
+
+    .most-booked-wrapper {
+    
+        padding: 0px;
+    }
+    .services-container {
+        margin-top: 13px;
+    }
+    .most-booked h2{
+        padding: 0px 12px;
+    }
+/* --- FIX: Allow Location Text to Wrap (Parent Container) --- */
+#main-app-container > header .option-item.location {
+    flex-grow: 1;
+    min-width: 0;
+    /* NEW: Aligns the map pin icon to the top of the multi-line text */
+    align-items: flex-start; 
+    padding-top: 6px; /* Adjust padding for better vertical alignment */
+    padding-bottom: 6px;
+}
+/* --- FIX: Limit Location Text to Two Lines --- */
+#location-display {
+    max-width: none;
+    flex-grow: 1;
+
+    /* --- THESE ARE THE KEY CHANGES --- */
+    white-space: normal; /* ✅ ADD THIS LINE BACK */
+    overflow: hidden;
+    text-overflow: ellipsis;
+    display: -webkit-box;
+    -webkit-line-clamp: 2; /* Limits the text to 2 lines */
+    -webkit-box-orient: vertical;
+}
+
+.location-modal-dialog{
+    max-height: 100vh;
+    top:-120px;
+    padding-bottom: 70px;
+    height:131%;
+}
+}
+
+@media (max-width:768px){
+.app-buttons{
+    flex-direction: row;
+}
+
+
+}
+
+@media (max-width: 768px) {
+    .footer-main {
+        grid-template-columns: 1fr;
+        gap: 30px;
+    }
+    .footer-bottom {
+        flex-direction: column;
+        gap: 15px;
+    }
+
+    /* --- ADD THESE 3 RULES TO CENTER THE CONTENT --- */
+
+    /* 1. Center all text, titles, and lists */
+    .footer-column {
+        text-align: center;
+    }
+
+    /* 2. Center the social media icons */
+    .social-links {
+        justify-content: center;
+    }
+
+    /* 3. Center the app store download buttons */
+    .app-buttons {
+        align-items: center;
+    }
+    .footer-column.about .footer-logo{
+        display: inline grid;
+    }
+    .footer-column.about .footer-logo img{
+        left:35%;
+        position: relative;
+    }
+    .policy-links{
+        position: relative;
+        left:15px;
+    }
+
+
+    
+}
+
+/* footer.css */
+
+@media (max-width: 768px) {
+    .about-us-header {
+        padding: 0.5rem 1rem;
+    }
+
+    /* --- 1. Compact Hero Section --- */
+    .about-hero {
+        padding: 60px 20px; /* Reduced padding */
+    }
+    .about-hero h1 {
+        font-size: 2.2rem; /* Reduced font size */
+    }
+    .about-hero p {
+        font-size: 1rem; /* Reduced font size */
+    }
+
+    /* --- 2. Compact Content Sections --- */
+    .content-section {
+        grid-template-columns: 1fr;
+        gap: 30px; /* Reduced gap */
+        margin-bottom: 60px; /* Reduced margin */
+    }
+    .content-section .content-image {
+        order: -1;
+    }
+    .content-text h2, .team-section h2, .locations-section h2, .cta-section h2 {
+        font-size: 2rem; /* Reduced font size */
+    }
+
+    /* --- 3. FIX: Compact Stats Section --- */
+    .stats-section {
+        grid-template-columns: 1fr 1fr;
+        padding: 30px 15px; /* Reduced padding */
+        gap: 20px; /* Reduced gap */
+        margin-bottom: 60px;
+    }
+    .stat-item h3 {
+        font-size: 2.5rem; /* Smaller number font */
+    }
+    .stat-item p {
+        font-size: 0.9rem; /* Smaller label font */
+    }
+
+    /* --- 4. General Spacing Adjustments --- */
+    .about-container {
+        padding: 40px 15px; /* Reduced padding */
+    }
+    .team-section, .cta-section {
+        margin-bottom: 60px;
+    }
+        #checkout-summary-pane {
+            padding-bottom: 70px;
+        }
+
+        /* ADD THIS CODE AT THE END OF mobile-nav.css, INSIDE THE MEDIA QUERY */
+/* (Or replace the old version if you added it there) */
+
+.add-to-cart-toast {
+    position: fixed;
+    bottom: 75px; /* Raised slightly for more breathing room */
+    left: 50%;
+    width: 97%;
+    max-width: 500px;
+    
+    /* --- Style Updates --- */
+    background-color: #ffffff; /* White background */
+    color: #333;               /* Dark text for readability */
+    border-radius: 8px;
+    border-top: 3px solid #28a745; /* Green success accent border */
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1); /* Softer, modern shadow */
+
+    padding: 14px 20px;
+    font-weight: 500;
+    z-index: 3000;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+
+    /* --- Animation Start State --- */
+    opacity: 0;
+    /* Start centered horizontally and 100px below its final position */
+    transform: translate(-50%, 100px); 
+    visibility: hidden;
+    transition: all 0.5s cubic-bezier(0.215, 0.610, 0.355, 1); /* Smoother animation curve */
+}
+
+/* Style for the checkmark icon */
+.add-to-cart-toast i {
+    color: #28a745;
+    font-size: 1.2rem;
+}
+
+.add-to-cart-toast.show {
+    /* --- Animation End State --- */
+    opacity: 1;
+    /* Move to its final centered position */
+    transform: translate(-50%, 0); 
+    visibility: visible;
+}
+#checkout-details-pane {
+    padding-bottom: 100px;
+}
+}
