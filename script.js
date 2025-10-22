@@ -219,6 +219,7 @@ function closeAllPopups() {
     document.getElementById('account-modal').style.display = 'none';
     document.getElementById('addon-selection-modal').style.display = 'none';
     document.getElementById('search-modal').style.display = 'none';
+    document.getElementById('search-modal').style.height = '';
     // Explicitly hide the cart sidebar and full cart modal
       document.getElementById('cartSidebar').classList.remove('active');
     document.getElementById('yourCartModal').classList.add('hidden');
@@ -1786,16 +1787,22 @@ async function fetchAllGroupedServices() {
         console.error("Error fetching grouped services:", error);
     }
 }
+// script.js
+
 function openSearchModal() {
     const modal = document.getElementById('search-modal');
     if (!modal) return;
+
+    // ✅ THE FIX (Part 1): Set a fixed height before the keyboard appears
+    const fullHeight = window.innerHeight;
+    modal.style.height = `${fullHeight}px`;
 
     // Build the category content when the modal is opened
     buildSearchModalContent();
 
     // Show the modal
     modal.classList.remove('hidden');
-    modal.style.display = 'block'; // Or 'flex' if you style it that way
+    modal.style.display = 'block';
 
     // Auto-focus the search input for a better user experience
     document.getElementById('modal-search-input').focus();
