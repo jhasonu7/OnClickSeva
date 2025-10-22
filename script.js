@@ -1,7 +1,7 @@
 // script.js
 
 // BASE URL for your API
-const API_BASE_URL = 'http://localhost:4000';
+const API_BASE_URL = 'https://ocs-backend-iogo.onrender.com';
 OPENCAGE_API_KEY="f83ce70d0c2d46579bdc734ecadc8c5a";
 // script.js - AT THE TOP
 const GEOAPIFY_API_KEY = 'ac165a30e88940d99a09b3ed3ccaa54c';
