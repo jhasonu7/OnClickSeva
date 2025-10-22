@@ -1,7 +1,10 @@
 /* Importing a premium-looking font from Google Fonts */
 @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&display=swap');
 /* ADD THIS CODE TO THE VERY TOP OF STYLE.CSS */
-
+/* Universal fix to remove the blue tap highlight on mobile */
+* {
+  -webkit-tap-highlight-color: transparent;
+}
 /*front login page css*/
 /* --- General and Reset Styles --- */
 :root {
