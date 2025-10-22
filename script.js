@@ -1380,7 +1380,7 @@ window.addEventListener('scroll', function () {
     // Ensure the header exists on the current page before trying to modify it
     if (header) {
         // Add the 'scrolled' class after scrolling down a bit (e.g., 50 pixels)
-        if (window.scrollY > 520) {
+        if (window.scrollY > 1) {
             header.classList.add('scrolled');
         } else {
             header.classList.remove('scrolled');
