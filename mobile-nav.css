@@ -1588,3 +1588,177 @@ background: linear-gradient(to top,
             padding: 10px 11px;
         }
 }
+/* mobile-nav.css */
+
+/* ============================================= */
+/* ==   [NEW] FULL-SCREEN SEARCH MODAL STYLES   == */
+/* ============================================= */
+@media (max-width: 768px) {
+
+    /* This rule reuses our existing full-screen popup style */
+    #search-modal {
+        background-color: #f4f7f9; /* A light, clean background */
+    }
+
+    .search-modal-content {
+        width: 100%;
+        height: 100%;
+        border-radius: 0;
+        box-shadow: none;
+        display: flex;
+        flex-direction: column;
+    }
+
+    /* --- Sticky Header with Search Bar --- */
+    .search-modal-header {
+        display: flex;
+        align-items: center;
+        gap: 15px;
+        padding: 10px 15px;
+        background-color: #fff;
+        box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+        flex-shrink: 0;
+        position: sticky;
+        top: 0;
+        z-index: 10;
+    }
+
+    .search-modal-header .fa-arrow-left {
+        font-size: 1.3rem;
+        color: #555;
+        cursor: pointer;
+    }
+
+    .search-input-wrapper {
+        flex-grow: 1;
+        position: relative;
+    }
+
+    .search-input-wrapper .fa-search {
+        position: absolute;
+        top: 50%;
+        left: 12px;
+        transform: translateY(-50%);
+        color: #aaa;
+    }
+
+    #modal-search-input {
+        width: 100%;
+        height: 44px;
+        border-radius: 8px;
+        border: 1px solid #ddd;
+        background-color: #f7f9fc;
+        padding-left: 40px;
+        padding-right: 35px; /* Space for clear button */
+        font-size: 1rem;
+        font-family: 'Poppins', sans-serif;
+    }
+     #modal-search-input:focus {
+        outline: none;
+        border-color: #6a11cb;
+        background-color: #fff;
+    }
+
+    .search-input-wrapper .clear-search-input {
+        position: absolute;
+        top: 50%;
+        right: 12px;
+        transform: translateY(-50%);
+        color: #aaa;
+        cursor: pointer;
+    }
+
+    /* --- Scrollable Body with Category Accordion --- */
+    .search-modal-body {
+        padding: 15px;
+        overflow-y: auto;
+        flex-grow: 1;
+    }
+    
+    .search-category-accordion {
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+    }
+
+    .search-category-item {
+        background-color: #fff;
+        border-radius: 12px;
+        box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+        overflow: hidden;
+    }
+
+    /* The clickable header for each main category */
+    .search-category-header {
+        display: flex;
+        align-items: center;
+        gap: 15px;
+        padding: 18px 15px;
+        cursor: pointer;
+        width: 100%;
+        background: none;
+        border: none;
+        text-align: left;
+    }
+
+    .search-category-header .category-icon {
+        font-size: 1.4rem;
+        color: #6a11cb;
+    }
+
+    .search-category-header .category-name {
+        font-size: 1.1rem;
+        font-weight: 600;
+        color: #333;
+        flex-grow: 1;
+    }
+
+    .search-category-header .chevron-icon {
+        font-size: 1rem;
+        color: #888;
+        transition: transform 0.3s ease;
+    }
+    
+    .search-category-item.active .chevron-icon {
+        transform: rotate(180deg);
+    }
+    
+    /* mobile-nav.css -> inside the @media (max-width: 768px) block */
+
+/* Remove the old styles for .subcategory-item, .subcategory-item img, etc. */
+/* Then, add these new and updated styles: */
+
+.subcategory-list {
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height 0.4s ease-out;
+}
+
+.search-category-item.active .subcategory-list {
+    max-height: 500px; /* Adjust if you have very long lists */
+    padding-bottom: 10px;
+}
+
+.search-subcategory-link {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 16px 15px;
+    border-top: 1px solid #f0f0f0;
+    cursor: pointer;
+    transition: background-color 0.2s;
+}
+
+.search-subcategory-link:hover {
+    background-color: #f7f9fc;
+}
+
+.search-subcategory-link span {
+    font-weight: 500;
+    color: #444;
+}
+
+.search-subcategory-link i {
+    color: #aaa;
+}
+}
