@@ -29,6 +29,9 @@ let mainPageScrollPosition = 0;
 // Add this with your other global variables
 let currentServiceForAddons = null;
 let currentServiceInBookingModal = null;
+// script.js
+
+let allGroupedServices = {};
 function isUserLoggedIn() {
     return !!localStorage.getItem('onclickseva_customer_token');
 }
@@ -158,26 +161,7 @@ async function fetchAllServicesForSearch() {
     }
 }
 
-// FIND AND MODIFY YOUR `DOMContentLoaded` LISTENER
-document.addEventListener('DOMContentLoaded', async () => {
-    const token = localStorage.getItem('onclickseva_customer_token');
 
-    if (token) {
-        console.log("Returning user detected. Syncing profile and server cart.");
-        showMainApp();
-        await fetchAndSyncUserProfile();
-        await fetchAllServicesForSearch(); // <-- ADD THIS LINE
-    } else {
-        console.log("Guest user detected. Loading cart from localStorage.");
-        loadCart();
-        updateCartCountDisplay();
-       
-updateMobileCartCountDisplay();
-        await fetchAllServicesForSearch(); // <-- ADD THIS LINE
-    }
-
-    // ... (rest of the DOMContentLoaded listener code) ...
-});
 
 
 // FIND AND MODIFY THE `fetchAndRenderServices` FUNCTION
@@ -234,6 +218,7 @@ function closeAllPopups() {
     document.getElementById('rewards-modal').style.display = 'none';
     document.getElementById('account-modal').style.display = 'none';
     document.getElementById('addon-selection-modal').style.display = 'none';
+    document.getElementById('search-modal').style.display = 'none';
     // Explicitly hide the cart sidebar and full cart modal
       document.getElementById('cartSidebar').classList.remove('active');
     document.getElementById('yourCartModal').classList.add('hidden');
@@ -349,6 +334,12 @@ function handleNavigation() {
         shouldShowOverlay = false; // Checkout doesn't need an overlay
         shouldDisableScroll = true;
     }
+
+    else if (hash === '#/search') {
+    isFullScreenView = true;
+    openSearchModal();
+    shouldDisableScroll = true;
+}
 
     else if (hash === '#/help') {
         isFullScreenView = true;
@@ -1773,6 +1764,107 @@ function renderAndShowAddonPopup(service) {
     modal.style.display = 'flex';
 }
 
+// script.js
+// script.js
+
+async function fetchAllGroupedServices() {
+    const categories = ['cleaning', 'painting', 'electrician', 'laundry'];
+    try {
+        const promises = categories.map(category =>
+            fetch(`${API_BASE_URL}/api/services/${category}/grouped`).then(res => {
+                if (!res.ok) throw new Error(`Failed to fetch grouped services for ${category}`);
+                return res.json();
+            })
+        );
+        const results = await Promise.all(promises);
+
+        categories.forEach((category, index) => {
+            allGroupedServices[category] = results[index];
+        });
+        console.log("Successfully fetched all grouped services.", allGroupedServices);
+    } catch (error) {
+        console.error("Error fetching grouped services:", error);
+    }
+}
+function openSearchModal() {
+    const modal = document.getElementById('search-modal');
+    if (!modal) return;
+
+    // Build the category content when the modal is opened
+    buildSearchModalContent();
+
+    // Show the modal
+    modal.classList.remove('hidden');
+    modal.style.display = 'block'; // Or 'flex' if you style it that way
+
+    // Auto-focus the search input for a better user experience
+    document.getElementById('modal-search-input').focus();
+}
+
+// script.js
+
+function buildSearchModalContent() {
+    const container = document.getElementById('search-categories-container');
+    if (!container) return;
+
+    // Define icons for your main categories
+    const categoryIcons = {
+        'cleaning': 'fa-broom',
+        'painting': 'fa-paint-roller',
+        'electrician': 'fa-bolt',
+        'laundry': 'fa-tshirt'
+    };
+
+    let contentHtml = '<div class="search-category-accordion">';
+    
+    // Define the order you want your categories to appear in
+    const categoryOrder = ['cleaning', 'painting', 'electrician', 'laundry'];
+
+    for (const categoryKey of categoryOrder) {
+        const categoryData = allGroupedServices[categoryKey];
+        if (!categoryData) continue; // Skip if data for this category isn't available
+
+        const categoryName = categoryKey.charAt(0).toUpperCase() + categoryKey.slice(1);
+        const icon = categoryIcons[categoryKey] || 'fa-concierge-bell';
+        
+        // Build the accordion item for the main category
+        contentHtml += `
+            <div class="search-category-item" data-category-name="${categoryKey}">
+                <button class="search-category-header">
+                    <i class="fas ${icon} category-icon"></i>
+                    <span class="category-name">${categoryName}</span>
+                    <i class="fas fa-chevron-down chevron-icon"></i>
+                </button>
+                <div class="subcategory-list">
+        `;
+        
+        // Loop through the SUB-CATEGORIES from your data
+        for (const subCategoryName in categoryData) {
+            const servicesInSubCategory = categoryData[subCategoryName];
+            // Ensure there's at least one service to link to
+            if (servicesInSubCategory.length > 0) {
+                // Use the ID of the first service in the sub-category as the navigation link
+                const firstServiceId = servicesInSubCategory[0]._id;
+                
+                contentHtml += `
+                    <div class="search-subcategory-link" data-service-id="${firstServiceId}">
+                        <span>${subCategoryName}</span>
+                        <i class="fas fa-chevron-right"></i>
+                    </div>
+                `;
+            }
+        }
+        
+        contentHtml += `
+                </div>
+            </div>
+        `;
+    }
+    
+    contentHtml += '</div>';
+    container.innerHTML = contentHtml;
+}
+
 document.addEventListener('DOMContentLoaded', async () => { // Make the listener async
     const token = localStorage.getItem('onclickseva_customer_token');
 
@@ -1781,6 +1873,8 @@ document.addEventListener('DOMContentLoaded', async () => { // Make the listener
         showMainApp();
         // This function now becomes the SOLE source of cart data for logged-in users.
         await fetchAndSyncUserProfile();
+        await fetchAllServicesForSearch(); // This line already exists
+    await fetchAllGroupedServices();
     } else {
         // For GUEST users, we still load the cart from localStorage.
         console.log("Guest user detected. Loading cart from localStorage.");
@@ -1788,6 +1882,8 @@ document.addEventListener('DOMContentLoaded', async () => { // Make the listener
         updateCartCountDisplay();
         
 updateMobileCartCountDisplay();
+await fetchAllServicesForSearch(); // This line already exists
+    await fetchAllGroupedServices();
     }
 
 const mobileSidebarToggleBtn = document.getElementById('mobile-sidebar-toggle-btn');
@@ -3344,7 +3440,83 @@ if (addonSelectionModal) {
             mainPageScrollPosition = window.scrollY;
         }
     });
+// script.js -> inside the main DOMContentLoaded listener
 
+// ... after your other listeners ...
+
+// --- [NEW] FULL-SCREEN SEARCH MODAL EVENT LISTENERS ---
+const mainSearchInput = document.getElementById('search-input');
+if (mainSearchInput) {
+    // This opens the modal when the main header's search bar is clicked
+    mainSearchInput.addEventListener('focus', (e) => {
+        e.preventDefault();
+        // Only trigger on mobile/tablet
+        if (window.innerWidth <= 768) {
+            mainSearchInput.blur(); // Prevent keyboard from opening on the main page
+            window.location.hash = '#/search';
+        }
+    });
+}
+
+const searchModal = document.getElementById('search-modal');
+if (searchModal) {
+    searchModal.addEventListener('click', (event) => {
+        // Close button
+        if (event.target.id === 'close-search-modal') {
+            history.back();
+        }
+
+        // Accordion expand/collapse
+        const categoryHeader = event.target.closest('.search-category-header');
+        if (categoryHeader) {
+            categoryHeader.parentElement.classList.toggle('active');
+        }
+
+      const subcategoryLink = event.target.closest('.search-subcategory-link');
+        if (subcategoryLink) {
+            const serviceId = subcategoryLink.dataset.serviceId;
+            // This navigates to the booking modal for the first service in that sub-category
+            window.location.hash = `#/booking?serviceId=${serviceId}`;
+        }
+    });
+
+    // Live search filtering
+    const modalSearchInput = document.getElementById('modal-search-input');
+    const clearModalSearch = document.getElementById('clear-modal-search');
+// ▼▼▼ REPLACE THE 'input' EVENT LISTENER FOR modalSearchInput ▼▼▼
+    modalSearchInput.addEventListener('input', () => {
+        const query = modalSearchInput.value.toLowerCase().trim();
+        clearModalSearch.classList.toggle('hidden', query.length === 0);
+
+        document.querySelectorAll('.search-category-item').forEach(categoryItem => {
+            let categoryVisible = false;
+            const categoryName = categoryItem.dataset.categoryName;
+
+            // Make category visible if the main category name matches the query
+            if (categoryName.includes(query)) {
+                categoryVisible = true;
+            }
+
+            // Filter the new sub-category links
+            categoryItem.querySelectorAll('.search-subcategory-link').forEach(subItem => {
+                const subItemName = subItem.querySelector('span').textContent.toLowerCase();
+                if (subItemName.includes(query)) {
+                    subItem.style.display = 'flex';
+                    categoryVisible = true; // Make category visible if any of its children match
+                } else {
+                    subItem.style.display = 'none';
+                }
+            });
+            categoryItem.style.display = categoryVisible ? 'block' : 'none';
+        });
+    });
+
+    clearModalSearch.addEventListener('click', () => {
+        modalSearchInput.value = '';
+        // Manually trigger the input event to reset the filter
+        modalSearchInput.dispatchEvent(new Event('input'));
+    });
+}
     // ... the rest of the DOMContentLoaded listener continues here ...
 
 }); // <-- This is the final closing bracket of DOMContentLoad
@@ -5655,4 +5827,3 @@ function showHelpSubPage(pageId) {
         subPage.scrollTop = 0;
     }
 }
-
