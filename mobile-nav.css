@@ -1580,4 +1580,11 @@ background: linear-gradient(to top,
         flex-shrink: 0; 
         width: 280px;   
     }
+    .service-category-tabs{
+                gap:8px;
+            }
+
+        .service-tab{
+            padding: 10px 11px;
+        }
 }
