@@ -1,9 +1,10 @@
 // script.js
 
 // BASE URL for your API
-const API_BASE_URL = 'https://ocs-backend-iogo.onrender.com';
-const OPENCAGE_API_KEY = 'f83ce70d0c2d46579bdc734ecadc8c5a';
-
+const API_BASE_URL = 'http://localhost:4000';
+OPENCAGE_API_KEY="f83ce70d0c2d46579bdc734ecadc8c5a";
+// script.js - AT THE TOP
+const GEOAPIFY_API_KEY = 'ac165a30e88940d99a09b3ed3ccaa54c';
 // Global cart object
 let cart = {}; // Stores serviceId: { service, quantity }
 let allServices = [];
@@ -30,6 +31,8 @@ let mainPageScrollPosition = 0;
 let currentServiceForAddons = null;
 let currentServiceInBookingModal = null;
 // script.js
+let map = null;
+let marker = null;
 
 let allGroupedServices = {};
 function isUserLoggedIn() {
@@ -740,7 +743,6 @@ function updateLocationDisplay(locationText) {
 }
 
 // SCRIPT.JS - REPLACE THIS FUNCTION
-
 function saveLocationToLocalStorage(location) {
     // --- SAVED LOCATIONS LOGIC ---
     // 1. REMOVE the old item if it exists, so we don't have duplicates.
@@ -755,15 +757,11 @@ function saveLocationToLocalStorage(location) {
     localStorage.setItem('onclickseva_saved_locations', JSON.stringify(savedLocations));
 
     // --- RECENT LOCATIONS LOGIC (this part was already correct) ---
-    // 1. REMOVE the old item if it exists.
     recentLocations = recentLocations.filter(loc => loc.address !== location.address);
-    // 2. ADD to the front of the array.
     recentLocations.unshift(location);
-    // 3. LIMIT the array.
     if (recentLocations.length > 5) {
         recentLocations = recentLocations.slice(0, 5);
     }
-    // 4. SAVE to local storage.
     localStorage.setItem('onclickseva_recent_locations', JSON.stringify(recentLocations));
 }
 
@@ -791,66 +789,6 @@ function loadLocation() {
     if (savedLocation) {
         updateLocationDisplay(savedLocation);
     }
-}
-// SCRIPT.JS - ADD THIS NEW FUNCTION
-
-async function getRealLocation() {
-    const useLocationBtn = document.querySelector('.use-current-location-btn');
-    // script.js - inside getRealLocation
-
-    const locationInput = document.getElementById('location-search-input'); // <-- This is the correct ID
-
-    // 1. Check if the browser supports Geolocation
-    if (!navigator.geolocation) {
-        alert("Geolocation is not supported by your browser.");
-        return;
-    }
-
-    // 2. Provide feedback to the user that something is happening
-    useLocationBtn.disabled = true;
-    useLocationBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Fetching location...';
-
-    // 3. This function runs if we successfully get the coordinates
-    const success = async (position) => {
-        const { latitude, longitude } = position.coords;
-
-        // 4. Use your API key to ask OpenCage for the address
-        const apiUrl = `https://api.opencagedata.com/geocode/v1/json?q=${latitude}+${longitude}&key=${OPENCAGE_API_KEY}`;
-
-        try {
-            const response = await fetch(apiUrl);
-            if (!response.ok) throw new Error('Failed to fetch address from API');
-
-            const data = await response.json();
-
-            if (data.results && data.results.length > 0) {
-                // 5. Display the formatted address in the input box
-                const address = data.results[0].formatted;
-                locationInput.value = address; // Put the address in the input box
-                document.getElementById('add-new-address-btn').classList.remove('hidden'); // Show the add button
-                document.getElementById('confirm-selected-location-btn').classList.add('hidden'); // Hide confirm button initially
-            } else {
-                alert("Could not find a valid address for your location.");
-            }
-        } catch (error) {
-            console.error('Reverse geocoding error:', error);
-            alert('Could not fetch your address. Please enter it manually.');
-        } finally {
-            // 6. Reset the button's appearance
-            useLocationBtn.disabled = false;
-            useLocationBtn.innerHTML = '<i class="fas fa-crosshairs"></i> Use my current location';
-        }
-    };
-
-    // This function runs if there's an error (e.g., user denies permission)
-    const error = () => {
-        alert("Unable to retrieve your location. Please ensure location services are enabled and permission is granted.");
-        useLocationBtn.disabled = false;
-        useLocationBtn.innerHTML = '<i class="fas fa-crosshairs"></i> Use my current location';
-    };
-
-    // 7. Ask the browser for the user's location
-    navigator.geolocation.getCurrentPosition(success, error);
 }
 
 // SCRIPT.JS - ADD THIS NEW FUNCTION
@@ -958,121 +896,110 @@ function renderLocationModalSkeleton() {
         </div>
     `;
 }
-// REPLACE the old, broken populateLocationModal function with this one
-
+// SCRIPT.JS - REPLACE the old populateLocationModal function with this one
 function populateLocationModal() {
     // 1. Find the main container that was overwritten by the skeleton.
     const modalBody = document.querySelector('#location-modal .location-modal-body');
     if (!modalBody) return;
 
     // 2. Rebuild the entire HTML structure that the skeleton wiped out.
-    // This ensures all buttons and containers exist before we try to access them.
     modalBody.innerHTML = `
         <div class="use-current-location-btn" id="use-current-location-btn">
             <i class="fas fa-crosshairs"></i>
             <span>Use current location</span>
         </div>
-
         <div class="location-section hidden" id="saved-locations-section">
             <h4>Saved</h4>
             <div id="saved-locations-list"></div>
         </div>
-
         <div class="location-section hidden" id="recent-locations-section">
             <h4>Recents</h4>
             <div id="recent-locations-list"></div>
         </div>
-
         <button class="add-new-address-btn hidden" id="add-new-address-btn">Add New Address</button>
         <button class="confirm-selected-location-btn hidden" id="confirm-selected-location-btn">Confirm Location</button>
     `;
 
-    // 3. Now that the structure is back, populate the lists within it.
+    // 3. Now that the structure is back, populate the lists.
     renderLocations('saved-locations-list', savedLocations, 'saved');
     renderLocations('recent-locations-list', recentLocations, 'recent');
 
-    // 4. We can now safely reset the other UI elements.
+    // 4. Reset other UI elements.
     const locationSearchInput = document.getElementById('location-search-input');
     if (locationSearchInput) locationSearchInput.value = '';
-
     const clearLocationSearchBtn = document.getElementById('clear-location-search');
     if (clearLocationSearchBtn) clearLocationSearchBtn.classList.add('hidden');
 
-    // 5. IMPORTANT: Re-attach event listeners to the newly created buttons,
-    // as the old ones were destroyed along with the original elements.
-    const useCurrentLocationBtn = document.getElementById('use-current-location-btn');
-    if (useCurrentLocationBtn) {
-        useCurrentLocationBtn.addEventListener('click', getRealLocation);
-    }
+    // 5. Re-attach event listeners to the newly created buttons.
+    document.getElementById('use-current-location-btn')?.addEventListener('click', getRealLocation);
+    document.getElementById('add-new-address-btn')?.addEventListener('click', handleAddNewAddress);
+    document.getElementById('confirm-selected-location-btn')?.addEventListener('click', handleConfirmLocation);
+}
 
-    const addNewAddressBtn = document.getElementById('add-new-address-btn');
-    if (addNewAddressBtn) {
-        addNewAddressBtn.addEventListener('click', async () => {
-            const newAddress = locationSearchInput.value.trim();
-            if (newAddress) {
-                const newLocation = { address: newAddress, title: 'Home' };
-                try {
-                    const response = await authenticatedFetch(`${API_BASE_URL}/api/customer/addresses`, {
-                        method: 'POST',
-                        body: JSON.stringify(newLocation)
-                    });
-                    if (!response.ok) throw new Error("Server failed to save new address.");
-
-                    saveLocationToLocalStorage(newLocation);
-                    updateLocationDisplay(newAddress);
-                    updateCheckoutAddress();
-                    closeLocationModal();
-                } catch (error) {
-                    console.error("Failed to save new address to server:", error);
-                    alert("Could not save your new address. Please try again.");
-                }
-            } else {
-                alert("Please enter an address in the search box to add.");
-            }
-        });
-    }
-
-    const confirmSelectedLocationBtn = document.getElementById('confirm-selected-location-btn');
-    if (confirmSelectedLocationBtn) {
-        confirmSelectedLocationBtn.addEventListener('click', async () => {
-            const selectedAddress = locationSearchInput.value.trim();
-            if (selectedAddress) {
-                const newLocation = { address: selectedAddress, title: 'Home' };
-                try {
-                    const response = await authenticatedFetch(`${API_BASE_URL}/api/customer/addresses`, {
-                        method: 'POST',
-                        body: JSON.stringify(newLocation)
-                    });
-                    if (!response.ok) throw new Error("Server failed to save address.");
-
-                    saveLocationToLocalStorage(newLocation);
-                    updateLocationDisplay(selectedAddress);
-                    updateCheckoutAddress();
-                    closeLocationModal();
-                } catch (error) {
-                    console.error("Failed to save address to server:", error);
-                    alert("Could not save your address. Please try again.");
-                }
-            } else {
-                alert('Please select or enter a location.');
-            }
-        });
+// Helper function to handle confirm button click
+async function handleConfirmLocation() {
+    const selectedAddress = document.getElementById('location-search-input').value.trim();
+    if (selectedAddress) {
+        const newLocation = { address: selectedAddress, title: 'Home' }; // Default title
+        try {
+            await authenticatedFetch(`${API_BASE_URL}/api/customer/addresses`, {
+                method: 'POST', body: JSON.stringify(newLocation)
+            });
+            saveLocationToLocalStorage(newLocation);
+            updateLocationDisplay(selectedAddress);
+            updateCheckoutAddress();
+            closeLocationModal();
+        } catch (error) {
+            console.error("Failed to save address:", error);
+            alert("Could not save your address. Please try again.");
+        }
     }
 }
+
+// Helper function to handle add new address button click
+async function handleAddNewAddress() {
+    const newAddress = document.getElementById('location-search-input').value.trim();
+    if (newAddress) {
+        const newLocation = { address: newAddress, title: 'Home' };
+        try {
+            await authenticatedFetch(`${API_BASE_URL}/api/customer/addresses`, {
+                method: 'POST', body: JSON.stringify(newLocation)
+            });
+            saveLocationToLocalStorage(newLocation);
+            updateLocationDisplay(newAddress);
+            updateCheckoutAddress();
+            closeLocationModal();
+        } catch (error) {
+            console.error("Failed to save new address:", error);
+            alert("Could not save your new address. Please try again.");
+        }
+    }
+}
+// script.js - REPLACE this function
+// REPLACE this function in script.js
+
 function openLocationModal() {
     const locationModal = document.getElementById('location-modal');
     if (locationModal) {
-        // --- FIX: Remove the 'hidden' class to make the modal visible ---
         locationModal.classList.remove('hidden');
-
-        renderLocationModalSkeleton();
         locationModal.style.display = 'flex';
+
+        // --- START OF FIX ---
+        // Initialize the map immediately if it doesn't exist. This prevents the race condition.
+        if (!map) {
+            initMap();
+        }
+
+        // After the browser renders the modal, tell Leaflet to re-check the map's container size.
+        // This prevents the gray screen/missing tiles issue.
         setTimeout(() => {
-            populateLocationModal();
-        }, 50);
+            if (map) {
+                map.invalidateSize();
+            }
+        }, 10); // A very small delay is enough.
+        // --- END OF FIX ---
     }
 }
-// script.js -> REPLACE the function above with this one
 
 function closeLocationModal() {
 
@@ -1867,60 +1794,288 @@ function buildSearchModalContent() {
     container.innerHTML = contentHtml;
 }
 
-document.addEventListener('DOMContentLoaded', async () => { // Make the listener async
-    const vh = window.innerHeight;
-    document.documentElement.style.setProperty('--vh', `${vh}px`);
-    const token = localStorage.getItem('onclickseva_customer_token');
+// script.js
 
-    if (token) {
-        console.log("Returning user detected. Syncing profile and server cart.");
-        showMainApp();
-        // This function now becomes the SOLE source of cart data for logged-in users.
-        await fetchAndSyncUserProfile();
-        await fetchAllServicesForSearch(); // This line already exists
-    await fetchAllGroupedServices();
-    } else {
-        // For GUEST users, we still load the cart from localStorage.
-        console.log("Guest user detected. Loading cart from localStorage.");
-        loadCart();
-        updateCartCountDisplay();
-        
-updateMobileCartCountDisplay();
-await fetchAllServicesForSearch(); // This line already exists
-    await fetchAllGroupedServices();
+// ▼▼▼ REPLACE your existing autoFetchInitialLocation function with this one ▼▼▼
+async function autoFetchInitialLocation() {
+    const loader = document.getElementById('initial-location-loader');
+    loader.classList.remove('hidden');
+
+    if (!navigator.geolocation) {
+        console.warn("Geolocation is not supported by this browser.");
+        loader.classList.add('hidden');
+        return;
     }
 
-const mobileSidebarToggleBtn = document.getElementById('mobile-sidebar-toggle-btn');
-if (mobileSidebarToggleBtn) {
-    mobileSidebarToggleBtn.addEventListener('click', (event) => {
-        event.stopPropagation();
-        // This adds the sidebar state to the URL and browser history
-        if (!window.location.hash.includes('&sidebar=open')) {
-            window.location.hash += '&sidebar=open';
+    try {
+        const position = await new Promise((resolve, reject) => {
+            navigator.geolocation.getCurrentPosition(resolve, reject, {
+                enableHighAccuracy: true,
+                timeout: 10000,
+                maximumAge: 0
+            });
+        });
+
+        const { latitude, longitude } = position.coords;
+
+        // --- 1. THIS IS THE FIX: Using the Geoapify Reverse Geocoding API ---
+        const apiUrl = `https://api.geoapify.com/v1/geocode/reverse?lat=${latitude}&lon=${longitude}&apiKey=${GEOAPIFY_API_KEY}`;
+
+        const response = await fetch(apiUrl);
+        const data = await response.json();
+
+        // --- 2. THIS IS THE FIX: Parsing Geoapify's response structure ---
+        if (data.features && data.features.length > 0) {
+            const properties = data.features[0].properties;
+            const fullAddress = properties.formatted;
+
+            // --- 3. THIS IS THE FIX: Using Geoapify's components for a clean title ---
+            let mainTitle =
+                properties.road ||
+                properties.neighbourhood ||
+                properties.suburb ||
+                properties.village ||
+                properties.town ||
+                properties.city ||
+                "Current Location";
+
+            // If we still have an "unnamed" road, find a better fallback.
+            if (mainTitle.toLowerCase().includes('unnamed')) {
+                mainTitle = properties.suburb || properties.village || properties.town || "Nearby Location";
+            }
+            
+            const subAddress = `${properties.city || ''}, ${properties.state || ''}, ${properties.postcode || ''}`.replace(/, ,/g, ',').trim();
+
+            const location = {
+                address: fullAddress,
+                title: mainTitle
+            };
+
+            saveLocationToLocalStorage(location);
+            updateLocationDisplay(fullAddress);
+
+            // Update the text in the "confirmed" state of the loader
+            document.getElementById('confirmed-location-main').textContent = mainTitle;
+            document.getElementById('confirmed-location-sub').textContent = subAddress;
+
+            loader.classList.add('show-confirmed');
+
+            setTimeout(() => {
+                loader.classList.add('hidden');
+            }, 2500);
+
+        } else {
+            throw new Error("No address found for the current coordinates via Geoapify.");
+        }
+    } catch (error) {
+        console.error("Auto location fetch failed:", error);
+        if (error.code === 1) {
+             alert("To get your exact location, please allow location access in your browser settings.");
+        } else if (error.code === 2) {
+            alert("Your location could not be determined. Please check your network or GPS.");
+        } else if (error.code === 3) {
+            alert("Getting your location took too long. Please try again in an area with a better signal.");
+        }
+        loader.classList.add('hidden');
+    }
+}
+// ▲▲▲ END OF REPLACEMENT ▲▲▲
+// ▲▲▲ END OF REPLACEMENT ▲▲▲
+function renderLocationModalSkeleton() {
+    const body = document.querySelector('#location-modal .location-modal-body');
+    if (!body) return;
+
+    body.innerHTML = `
+        <div class="skeleton skeleton-btn" style="height: 50px; margin-bottom: 20px; border-radius: 8px;"></div>
+
+        <div class="location-section">
+            <div class="skeleton skeleton-title" style="width: 30%; height: 1rem; margin-bottom: 15px;"></div>
+            <div class="skeleton-location-item">
+                <div class="skeleton skeleton-icon" style="width: 40px; height: 40px;"></div>
+                <div class="skeleton-location-details">
+                    <div class="skeleton skeleton-text" style="width: 40%; height: 1rem;"></div>
+                    <div class="skeleton skeleton-text" style="width: 80%; height: 0.8rem; margin-bottom: 0;"></div>
+                </div>
+            </div>
+            <div class="skeleton-location-item">
+                <div class="skeleton skeleton-icon" style="width: 40px; height: 40px;"></div>
+                <div class="skeleton-location-details">
+                    <div class="skeleton skeleton-text" style="width: 30%; height: 1rem;"></div>
+                    <div class="skeleton skeleton-text" style="width: 70%; height: 0.8rem; margin-bottom: 0;"></div>
+                </div>
+            </div>
+        </div>
+    `;
+}
+
+
+// script.js - ADD THESE NEW FUNCTIONS
+
+// Initializes our new Leaflet map
+function initMap() {
+    const searchInput = document.getElementById('location-search-input');
+    const patna = [25.5941, 85.1376]; // Default center [lat, lng]
+
+    // Initialize the map
+    map = L.map('location-map').setView(patna, 13);
+
+    // Add the OpenStreetMap tiles (the map images)
+    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+        attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+    }).addTo(map);
+
+    // Add the draggable marker
+    marker = L.marker(patna, {
+        draggable: true
+    }).addTo(map);
+
+    // When the user stops dragging the marker, get the new address
+    marker.on('dragend', function(event) {
+        const latLng = event.target.getLatLng();
+        reverseGeocodeAndUpdateInput(latLng);
+    });
+
+    // Initialize Geoapify Autocomplete on the search input
+    const autocomplete = new Geoapify.Autocomplete(searchInput, {
+         apiKey: GEOAPIFY_API_KEY,
+         filterBy: {
+            country: ['in'] // Restrict search to India
+         }
+    });
+
+    autocomplete.on('select', (location) => {
+        if (location) {
+            const lat = location.properties.lat;
+            const lon = location.properties.lon;
+            const latLng = { lat, lng: lon };
+
+            map.setView(latLng, 17); // Zoom in on the selected address
+            marker.setLatLng(latLng);
+            searchInput.value = location.properties.formatted;
         }
     });
 }
 
-const mobileCartToggleBtn = document.getElementById('mobile-cart-toggle-btn');
-if (mobileCartToggleBtn) {
-    mobileCartToggleBtn.addEventListener('click', (event) => {
-        event.stopPropagation();
-        // This adds '&cart=open' to the URL, which our navigation handler will detect.
-        if (!window.location.hash.includes('&cart=open')) {
-            window.location.hash += '&cart=open';
+// This function gets an address from coordinates using Geoapify
+function reverseGeocodeAndUpdateInput(latLng) {
+    const searchInput = document.getElementById('location-search-input');
+    const url = `https://api.geoapify.com/v1/geocode/reverse?lat=${latLng.lat}&lon=${latLng.lng}&apiKey=${GEOAPIFY_API_KEY}`;
+
+    fetch(url)
+        .then(response => response.json())
+        .then(result => {
+            if (result.features.length) {
+                searchInput.value = result.features[0].properties.formatted;
+            } else {
+                searchInput.value = "No address found at this location.";
+            }
+        })
+        .catch(error => {
+            console.error("Reverse geocoding failed:", error);
+            searchInput.value = "Could not determine address.";
+        });
+}
+
+// REPLACE this function in script.js
+
+function getRealLocation() {
+    // --- START OF FIX ---
+    // Safety Check: If the map object isn't ready for any reason, stop the function.
+    if (!map) {
+        console.error("getRealLocation was called, but the map has not been initialized yet.");
+        return;
+    }
+    // --- END OF FIX ---
+
+    if (navigator.geolocation) {
+        navigator.geolocation.getCurrentPosition(
+            (position) => {
+                const latLng = {
+                    lat: position.coords.latitude,
+                    lng: position.coords.longitude
+                };
+                map.setView(latLng, 17); // This line will now work correctly
+                marker.setLatLng(latLng);
+                reverseGeocodeAndUpdateInput(latLng);
+            },
+            () => {
+                alert("Error: The Geolocation service failed or was denied.");
+            }
+        );
+    } else {
+        alert("Error: Your browser doesn't support geolocation.");
+    }
+}
+document.addEventListener('DOMContentLoaded', async () => {
+    const vh = window.innerHeight;
+    document.documentElement.style.setProperty('--vh', `${vh}px`);
+
+    const token = localStorage.getItem('onclickseva_customer_token');
+
+    // --- LOGIC HAS BEEN REVERSED: We check for login status FIRST ---
+
+    if (token) {
+        // --- LOGGED-IN USER ---
+        console.log("Returning user detected. Syncing profile and fetching fresh location.");
+        showMainApp();
+        await fetchAndSyncUserProfile(); // Syncs cart, addresses, etc. from the DB
+
+        // <-- THIS IS THE KEY CHANGE
+        // Always run the auto-fetch process for a logged-in user on every page load/refresh.
+        await autoFetchInitialLocation();
+
+        // Load other necessary data after fetching location
+        await fetchAllServicesForSearch();
+        await fetchAllGroupedServices();
+
+    } else {
+        // --- GUEST USER ---
+        console.log("Guest user detected. Loading from localStorage.");
+
+        // For guests, we keep the original logic: only fetch if no location is saved.
+        const hasSavedLocation = localStorage.getItem('onclickseva_saved_locations');
+        if (!hasSavedLocation) {
+            await autoFetchInitialLocation();
+        } else {
+            loadLocationsFromLocalStorage();
         }
-    });
-}
-    
-  const overlay = document.getElementById('overlay');
-if (overlay) {
-    overlay.addEventListener('click', (event) => {
-        event.stopPropagation();
-        // The overlay now just acts as a universal back button.
-        // Our navigation handler will figure out what to close.
-        history.back();
-    });
-}
+
+        // Load guest cart and other data from local storage
+        loadCart();
+        updateCartCountDisplay();
+        updateMobileCartCountDisplay();
+        await fetchAllServicesForSearch();
+        await fetchAllGroupedServices();
+    }
+
+    // The rest of your event listeners remain the same...
+    const mobileSidebarToggleBtn = document.getElementById('mobile-sidebar-toggle-btn');
+    if (mobileSidebarToggleBtn) {
+        mobileSidebarToggleBtn.addEventListener('click', (event) => {
+            event.stopPropagation();
+            if (!window.location.hash.includes('&sidebar=open')) {
+                window.location.hash += '&sidebar=open';
+            }
+        });
+    }
+
+    const mobileCartToggleBtn = document.getElementById('mobile-cart-toggle-btn');
+    if (mobileCartToggleBtn) {
+        mobileCartToggleBtn.addEventListener('click', (event) => {
+            event.stopPropagation();
+            if (!window.location.hash.includes('&cart=open')) {
+                window.location.hash += '&cart=open';
+            }
+        });
+    }
+
+    const overlay = document.getElementById('overlay');
+    if (overlay) {
+        overlay.addEventListener('click', (event) => {
+            event.stopPropagation();
+            history.back();
+        });
+    }
 
     function renderServiceCards(container, services, category) {
         // Clear any existing content (like "Loading...")
