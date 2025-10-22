@@ -1793,10 +1793,6 @@ function openSearchModal() {
     const modal = document.getElementById('search-modal');
     if (!modal) return;
 
-    // ✅ THE FIX (Part 1): Set a fixed height before the keyboard appears
-    const fullHeight = window.innerHeight;
-    modal.style.height = `${fullHeight}px`;
-
     // Build the category content when the modal is opened
     buildSearchModalContent();
 
@@ -1807,7 +1803,6 @@ function openSearchModal() {
     // Auto-focus the search input for a better user experience
     document.getElementById('modal-search-input').focus();
 }
-
 // script.js
 
 function buildSearchModalContent() {
@@ -1873,6 +1868,8 @@ function buildSearchModalContent() {
 }
 
 document.addEventListener('DOMContentLoaded', async () => { // Make the listener async
+    const vh = window.innerHeight;
+    document.documentElement.style.setProperty('--vh', `${vh}px`);
     const token = localStorage.getItem('onclickseva_customer_token');
 
     if (token) {
