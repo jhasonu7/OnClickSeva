@@ -1124,6 +1124,20 @@
     </div>
 </div>
 
+<div id="search-modal" class="modal hidden">
+    <div class="search-modal-content">
+        <div class="search-modal-header">
+            <i class="fas fa-arrow-left" id="close-search-modal"></i>
+            <div class="search-input-wrapper">
+                <i class="fas fa-search"></i>
+                <input type="text" id="modal-search-input" placeholder="Search for services (e.g., 'AC repair')">
+                <i class="fas fa-times-circle clear-search-input hidden" id="clear-modal-search"></i>
+            </div>
+        </div>
+        <div class="search-modal-body" id="search-categories-container">
+            </div>
+    </div>
+</div>
 
 <!-- index.html - ADD THIS NEW MODAL -->
 
@@ -2102,14 +2116,16 @@
         </div>
     </div>
 </div>
+
+
+
 <div id="add-to-cart-toast" class="add-to-cart-toast">
         <i class="fas fa-check-circle"></i>
         <span id="toast-message-text">Item added to cart</span>
     </div>
     <script src="script.js"></script>
     <script src="footer.js"></script>
-    <script src="design.js"></script>
-    
+   
 <nav class="mobile-bottom-nav">
         <a href="#home" class="mobile-nav-btn" data-action="go-home">
             <i class="fas fa-home"></i>
