@@ -3478,39 +3478,70 @@ if (searchModal) {
             // This navigates to the booking modal for the first service in that sub-category
             window.location.hash = `#/booking?serviceId=${serviceId}`;
         }
+        const resultItem = event.target.closest('.search-result-service-item');
+    if (resultItem) {
+        const serviceId = resultItem.dataset.serviceId;
+        // Navigate to the booking page for the clicked service
+        window.location.hash = `#/booking?serviceId=${serviceId}`;
+    }
+
     });
+
+    // script.js -> inside the 'if (searchModal)' block
 
     // Live search filtering
     const modalSearchInput = document.getElementById('modal-search-input');
     const clearModalSearch = document.getElementById('clear-modal-search');
-// ▼▼▼ REPLACE THE 'input' EVENT LISTENER FOR modalSearchInput ▼▼▼
-    modalSearchInput.addEventListener('input', () => {
-        const query = modalSearchInput.value.toLowerCase().trim();
-        clearModalSearch.classList.toggle('hidden', query.length === 0);
 
-        document.querySelectorAll('.search-category-item').forEach(categoryItem => {
-            let categoryVisible = false;
-            const categoryName = categoryItem.dataset.categoryName;
+    // script.js
 
-            // Make category visible if the main category name matches the query
-            if (categoryName.includes(query)) {
-                categoryVisible = true;
-            }
+// ▼▼▼ REPLACE WITH THIS NEW, UPGRADED SEARCH LOGIC ▼▼▼
+modalSearchInput.addEventListener('input', () => {
+    const query = modalSearchInput.value.toLowerCase().trim();
+    clearModalSearch.classList.toggle('hidden', query.length === 0);
 
-            // Filter the new sub-category links
-            categoryItem.querySelectorAll('.search-subcategory-link').forEach(subItem => {
-                const subItemName = subItem.querySelector('span').textContent.toLowerCase();
-                if (subItemName.includes(query)) {
-                    subItem.style.display = 'flex';
-                    categoryVisible = true; // Make category visible if any of its children match
-                } else {
-                    subItem.style.display = 'none';
-                }
-            });
-            categoryItem.style.display = categoryVisible ? 'block' : 'none';
-        });
-    });
+    const categoriesContainer = document.getElementById('search-categories-container');
+    const resultsContainer = document.getElementById('search-results-container');
 
+    // If the search query is too short, show the default category browser
+    if (query.length < 2) {
+        categoriesContainer.classList.remove('hidden');
+        resultsContainer.classList.add('hidden');
+        resultsContainer.innerHTML = ''; // Clear old results
+        return;
+    }
+
+    // If there is a query, hide the category browser and show the results list
+    categoriesContainer.classList.add('hidden');
+    resultsContainer.classList.remove('hidden');
+
+    // Filter the global `allServices` array to find matches
+    const matchingServices = allServices.filter(service => 
+        service.name.toLowerCase().includes(query)
+    );
+
+    // Now, render the results
+    if (matchingServices.length > 0) {
+        resultsContainer.innerHTML = matchingServices.map(service => {
+            // Capitalize the first letter of the category for display
+            const parentCategory = service.category.charAt(0).toUpperCase() + service.category.slice(1);
+            
+            return `
+                <div class="search-result-service-item" data-service-id="${service._id}">
+                    <img src="${service.image_src}" alt="${service.name}">
+                    <div class="service-text-details">
+                        <span class="service-name">${service.name}</span>
+                        <span class="service-parent-category">in ${parentCategory}</span>
+                    </div>
+                </div>
+            `;
+        }).join('');
+    } else {
+        resultsContainer.innerHTML = '<p class="no-results-message">No services found for your search.</p>';
+    }
+});
+// ▲▲▲ END OF REPLACEMENT ▲▲▲
+    // ▲▲▲ END OF REPLACEMENT ▲▲▲
     clearModalSearch.addEventListener('click', () => {
         modalSearchInput.value = '';
         // Manually trigger the input event to reset the filter
