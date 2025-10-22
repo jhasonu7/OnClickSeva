@@ -1498,3 +1498,86 @@ background: linear-gradient(to top,
     padding-bottom: 100px;
 }
 }
+/* ======================================================= */
+/* ==   [NEW] RESPONSIVE STYLES FOR LOGOUT/FRONT PAGE   == */
+/* ======================================================= */
+
+/* Add this entire block to the end of your mobile-nav.css file */
+@media (max-width: 768px) {
+
+    /* --- Request 3: Hide Bottom Nav on Logout Page --- */
+    /* This rule targets the bottom navigation bar ONLY when the main app is hidden 
+       (which is the state of your logout/front page). */
+    #main-app-container.hidden ~ .mobile-bottom-nav {
+        display: none;
+    }
+
+
+    /* --- Request 1: Professional Header & Login Box on Mobile --- */
+
+    /* This makes the main section stack vertically on mobile */
+    #login-page-container .login-hero-container {
+        flex-direction: column-reverse; /* Keeps image on top */
+        gap: 30px;
+        text-align: center;
+        padding-top: 20px;
+    }
+    
+    #login-page-container .login-hero-text {
+        width: 100%;
+    }
+
+    /* Adjusts typography for smaller screens */
+    #login-page-container .login-hero-text h1 {
+        font-size: 2.5rem; 
+    }
+    
+    #login-page-container .login-hero-text > p {
+        margin-left: auto;
+        margin-right: auto;
+    }
+
+    /* Ensures the login card looks good on small screens */
+    #login-page-container .login-card {
+        max-width: 100%;
+        margin: 0 auto;
+        padding: 25px; 
+    }
+
+    #login-page-container .login-hero-image img {
+        width: 100%; 
+        max-width: 350px; /* Prevents image from being too large */
+    }
+    
+    /* Simplifies and centers the header on the login page */
+    #login-page-container .site-header .container {
+        justify-content: center; 
+    }
+    #login-page-container .header-right {
+        display: none; 
+    }
+
+
+    /* --- Request 2: Horizontal Service Cards on Logout Page --- */
+    
+    /* This converts the service card grid into a horizontal scrolling flex container */
+    #login-page-container .services-grid {
+        display: flex;
+        overflow-x: auto;   /* Enables horizontal scrolling */
+        padding: 0 15px 20px 15px; /* Adds side padding and space for scrollbar */
+        gap: 15px;
+        
+        /* Visually hides the scrollbar but keeps it functional */
+        scrollbar-width: none; /* For Firefox */
+        -ms-overflow-style: none;  /* For IE/Edge */
+    }
+    #login-page-container .services-grid::-webkit-scrollbar {
+        display: none; /* For Chrome, Safari, Opera */
+    }
+
+    /* This gives each service card a fixed width so they don't get squished */
+    #login-page-container .services-grid .service-card {
+        flex-shrink: 0; 
+        width: 280px;   
+    }
+}
