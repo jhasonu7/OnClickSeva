@@ -6854,3 +6854,177 @@ header.profile-active {
     color: #aaa;
     font-size: 0.8rem;
 }
+/* style.css -> ADD THIS AT THE END OF THE FILE */
+
+/* ============================================= */
+/* ==   [NEW] INITIAL LOCATION LOADER STYLES  == */
+/* ============================================= */
+
+#initial-location-loader {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100vh; /* Full viewport height */
+    background-color: #ffffff;
+    z-index: 9999; /* Highest z-index to cover everything */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    text-align: center;
+    color: #333;
+}
+
+.loader-state {
+    display: none; /* Hide both states by default */
+}
+
+.loader-state.active {
+    display: flex; /* Show only the active state */
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
+/* --- State 1: Fetching Animation --- */
+.location-pin-wrapper {
+    position: relative;
+    width: 60px;
+    height: 60px;
+    margin-bottom: 20px;
+}
+.location-pin {
+    width: 20px;
+    height: 20px;
+    background-color: #6a11cb;
+    border-radius: 50% 50% 50% 0;
+    transform: rotate(-45deg);
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    margin: -10px 0 0 -10px;
+    animation: bounce 1.5s infinite ease-in-out;
+}
+.pin-pulse {
+    width: 60px;
+    height: 60px;
+    background-color: rgba(106, 17, 203, 0.2);
+    border-radius: 50%;
+    position: absolute;
+    top: 0;
+    left: 0;
+    animation: pulse 1.5s infinite cubic-bezier(0.66, 0, 0, 1);
+}
+@keyframes bounce {
+    0%, 100% { transform: translateY(0) rotate(-45deg); }
+    50% { transform: translateY(-10px) rotate(-45deg); }
+}
+@keyframes pulse {
+    0% { transform: scale(0.5); opacity: 0; }
+    50% { opacity: 1; }
+    100% { transform: scale(1.2); opacity: 0; }
+}
+#fetching-state p {
+    font-size: 1.2rem;
+    font-weight: 500;
+}
+
+/* --- State 2: Confirmed Animation & Styles --- */
+#initial-location-loader.show-confirmed #fetching-state {
+    display: none;
+}
+#initial-location-loader.show-confirmed #confirmed-state {
+    display: flex;
+    flex-direction: row; /* Arrange items side-by-side */
+    align-items: center; /* Vertically center the icon and text block */
+    justify-content: center; /* Horizontally center the whole group */
+    gap: 20px; /* Create space between the icon and the text */
+    width: 90%;
+    max-width: 400px;
+}
+.success-icon-wrapper { margin-bottom: 0; }
+.success-checkmark { width: 80px; height: 80px; border-radius: 50%; display: block; stroke-width: 3; stroke: #28a745; stroke-miterlimit: 10; animation: scaleIn 0.4s ease-in-out; }
+.success-checkmark .checkmark-circle { stroke-dasharray: 166; stroke-dashoffset: 166; stroke: #28a745; fill: none; animation: stroke 0.6s cubic-bezier(0.65, 0, 0.45, 1) 0.2s forwards; }
+.success-checkmark .checkmark-check { transform-origin: 50% 50%; stroke-dasharray: 48; stroke-dashoffset: 48; animation: stroke 0.3s cubic-bezier(0.65, 0, 0.45, 1) 0.8s forwards; }
+
+/* --- State 2: Confirmed Animation & Styles (REPLACED) --- */
+#initial-location-loader.show-confirmed #fetching-state {
+    display: none;
+}
+#initial-location-loader.show-confirmed #confirmed-state {
+    /* These are the key changes to stack and center everything */
+    display: flex;
+    flex-direction: column; /* Stack items vertically */
+    align-items: center;
+    justify-content: center;
+    width: 90%;
+    max-width: 400px;
+    text-align: center; /* Center all text content */
+}
+
+.success-icon-wrapper {
+    margin-bottom: 20px; /* Add space below the checkmark */
+}
+
+.success-checkmark { 
+    width: 80px; 
+    height: 80px; 
+    border-radius: 50%; 
+    display: block; 
+    stroke-width: 3; 
+    stroke: #28a745; 
+    stroke-miterlimit: 10; 
+    animation: scaleIn 0.4s ease-in-out; 
+}
+.success-checkmark .checkmark-circle { 
+    stroke-dasharray: 166; 
+    stroke-dashoffset: 166; 
+    stroke: #28a745; 
+    fill: none; 
+    animation: stroke 0.6s cubic-bezier(0.65, 0, 0.45, 1) 0.2s forwards; 
+}
+.success-checkmark .checkmark-check { 
+    transform-origin: 50% 50%; 
+    stroke-dasharray: 48; 
+    stroke-dashoffset: 48; 
+    animation: stroke 0.3s cubic-bezier(0.65, 0, 0.45, 1) 0.8s forwards; 
+}
+
+.confirmed-text-content {
+    display: flex;
+    flex-direction: column;
+    text-align: center; /* Ensure text is centered */
+}
+
+#confirmed-state p {
+    font-size: 1.1rem;
+    color: #28a745; /* Green text to match the icon */
+    font-weight: 500;
+    margin: 0 0 8px 0;
+}
+
+#confirmed-state strong {
+    font-size: 1.8rem;
+    color: #1a2533;
+    line-height: 1.2;
+    word-break: break-word;
+    margin-bottom: 4px;
+}
+
+#confirmed-state span {
+    font-size: 0.9rem;
+    color: #556270;
+    line-height: 1.4;
+}
+
+/* style.css -> Add this new rule */
+
+#location-map {
+    width: 100%;
+    height: 300px; /* Give the map a visible height */
+    border-radius: 8px;
+    margin-bottom: 20px;
+    border: 1px solid #ddd;
+    background-color: #f9f9f9; /* Placeholder color */
+}
