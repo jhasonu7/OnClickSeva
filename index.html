@@ -10,6 +10,8 @@
     <link rel="stylesheet" href="responsive.css">
     <link rel="stylesheet" href="mobile-nav.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin=""/>
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
 </head>
 <div id="loading-spinner" class="modal hidden" style="justify-content: center; align-items: center; background-color: rgba(0,0,0,0.3); z-index: 9999;">
     <div class="fa-3x">
@@ -17,6 +19,33 @@
     </div>
 </div>
 <body>
+   <div id="initial-location-loader" class="hidden">
+    <div id="fetching-state" class="loader-state active">
+        <div class="location-pin-wrapper">
+            <div class="location-pin"></div>
+            <div class="pin-pulse"></div>
+        </div>
+        <p>Fetching your location...</p>
+    </div>
+    <div id="confirmed-state" class="loader-state">
+        <div class="success-icon-wrapper">
+            <svg class="success-checkmark" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 52 52">
+                <circle class="checkmark-circle" cx="26" cy="26" r="25" fill="none"/>
+                <path class="checkmark-check" fill="none" d="M14.1 27.2l7.1 7.2 16.7-16.8"/>
+            </svg>
+        </div>
+        <div class="confirmed-text-content">
+            <p>Delivering service at</p>
+            <strong id="confirmed-location-main">Sarangpur Rd</strong>
+            <span id="confirmed-location-sub">Sarangpur Rd, Akhtiyarpur Balbhadra, Bihar</span>
+        </div>
+    </div>
+</div>
+    <div id="loading-spinner" class="modal hidden" style="justify-content: center; align-items: center; background-color: rgba(0,0,0,0.3); z-index: 9999;">
+        <div class="fa-3x">
+            <i class="fas fa-spinner fa-spin" style="color: white;"></i>
+        </div>
+    </div>
     <div id="login-page-container">
      <header class="site-header">
       <div class="container">
@@ -690,23 +719,27 @@
             <span class="close-button" id="close-location-modal">&times;</span>
         </div>
 
-        <div class="location-modal-body">
-            <div class="use-current-location-btn" id="use-current-location-btn">
-                <i class="fas fa-crosshairs"></i>
-                <span>Use current location</span>
-            </div>
+       <div class="location-modal-body">
+    <div class="use-current-location-btn" id="use-current-location-btn">
+        <i class="fas fa-crosshairs"></i>
+        <span>Use current location</span>
+    </div>
 
-            <div class="location-section hidden" id="saved-locations-section">
-                <h4>Saved</h4>
-                <div id="saved-locations-list">
-                    </div>
-            </div>
+    <div id="location-map"></div>
 
-            <div class="location-section hidden" id="recent-locations-section">
-                <h4>Recents</h4>
-                <div id="recent-locations-list">
-                    </div>
+    <div class="location-section hidden" id="saved-locations-section">
+        <h4>Saved</h4>
+        <div id="saved-locations-list">
             </div>
+    </div>
+
+    <div class="location-section hidden" id="recent-locations-section">
+        <h4>Recents</h4>
+        <div id="recent-locations-list">
+            </div>
+    </div>
+
+  
 
             <button class="add-new-address-btn hidden" id="add-new-address-btn">Add New Address</button>
             <button class="confirm-selected-location-btn" id="confirm-selected-location-btn">Confirm Location</button>
