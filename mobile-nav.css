@@ -1761,4 +1761,64 @@ background: linear-gradient(to top,
 .search-subcategory-link i {
     color: #aaa;
 }
+    /* mobile-nav.css -> inside @media (max-width: 768px) */
+
+/* ... after the .search-subcategory-link styles ... */
+
+/* ============================================= */
+/* ==   [NEW] INDIVIDUAL SERVICE RESULT STYLES  == */
+/* ============================================= */
+
+#search-results-container {
+    display: flex;
+    flex-direction: column;
+    gap: 8px; /* A small gap between each result item */
+}
+
+.search-result-service-item {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    padding: 12px;
+    background-color: #fff;
+    border-radius: 10px;
+    box-shadow: 0 1px 4px rgba(0,0,0,0.04);
+    cursor: pointer;
+    transition: background-color 0.2s;
+}
+
+.search-result-service-item:hover {
+    background-color: #f7f9fc;
+}
+
+.search-result-service-item img {
+    width: 60px;
+    height: 60px;
+    object-fit: cover;
+    border-radius: 8px;
+    flex-shrink: 0;
+}
+
+.search-result-service-item .service-text-details {
+    display: flex;
+    flex-direction: column;
+}
+
+.search-result-service-item .service-name {
+    font-size: 1rem;
+    font-weight: 600;
+    color: #333;
+}
+
+.search-result-service-item .service-parent-category {
+    font-size: 0.8rem;
+    color: #777;
+    margin-top: 3px;
+}
+
+.no-results-message {
+    text-align: center;
+    padding: 40px 20px;
+    color: #888;
+}
 }
